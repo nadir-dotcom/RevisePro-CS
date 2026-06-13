@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>RevisePro — OCR J277 GCSE Computer Science</title>
+<style>
+/* ============== THEME ============== */
+:root{
+--bg:#07070d; --bg-2:#0d0d1a; --panel:rgba(20,20,38,.6); --panel-2:rgba(30,30,55,.55);
+--border:rgba(120,120,255,.18); --text:#e7e9ff; --muted:#8a8db0;
+--neon:#00f0ff; --neon-2:#ff2bd6; --neon-3:#7c5cff; --good:#27f59a; --bad:#ff4d6d; --warn:#ffb020;
+--shadow:0 8px 40px rgba(0,240,255,.08);
+}
+html.light{
+--bg:#f4f5fb; --bg-2:#e9ebf6; --panel:rgba(255,255,255,.7); --panel-2:rgba(255,255,255,.85);
+--border:rgba(60,60,120,.15); --text:#0d0f24; --muted:#5a5f7a;
+--neon:#0078ff; --neon-2:#c4009b; --neon-3:#5236d6; --shadow:0 8px 30px rgba(80,80,160,.12);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;overflow-x:hidden}
+body{min-height:100vh;background:
+radial-gradient(1200px 600px at 10% -10%, rgba(124,92,255,.25), transparent 60%),
+radial-gradient(1000px 500px at 110% 10%, rgba(255,43,214,.18), transparent 60%),
+radial-gradient(800px 400px at 50% 120%, rgba(0,240,255,.15), transparent 60%),
+var(--bg);
+}
+/* animated grid bg */
+.bg-grid{position:fixed;inset:0;z-index:-1;background-image:
+linear-gradient(rgba(124,92,255,.07) 1px,transparent 1px),
+linear-gradient(90deg,rgba(0,240,255,.06) 1px,transparent 1px);
+background-size:48px 48px;mask-image:radial-gradient(ellipse at center,#000 30%,transparent 80%);animation:drift 20s linear infinite}
+@keyframes drift{from{background-position:0 0,0 0}to{background-position:480px 480px,480px 480px}}
+
+/* ============== LAYOUT ============== */
+.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+aside.sidebar{position:sticky;top:0;height:100vh;background:linear-gradient(180deg,rgba(15,15,35,.85),rgba(10,10,25,.7));backdrop-filter:blur(14px);border-right:1px solid var(--border);padding:22px 16px;display:flex;flex-direction:column;gap:8px;z-index:50}
+html.light aside.sidebar{background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(245,245,255,.75))}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:22px;letter-spacing:1px;margin-bottom:18px}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:conic-gradient(from 0deg,var(--neon),var(--neon-2),var(--neon-3),var(--neon));box-shadow:0 0 20px var(--neon);position:relative}
+.logo-mark::after{content:"R";position:absolute;inset:0;display:grid;place-items:center;color:#000;font-weight:900}
+.logo span b{background:linear-gradient(90deg,var(--neon),var(--neon-2));-webkit-background-clip:text;color:transparent}
+.nav-btn{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;cursor:pointer;color:var(--muted);border:1px solid transparent;transition:all .2s;font-size:14px;font-weight:600}
+.nav-btn:hover{color:var(--text);background:rgba(124,92,255,.08);border-color:var(--border)}
+.nav-btn.active{color:var(--text);background:linear-gradient(90deg,rgba(0,240,255,.15),rgba(255,43,214,.1));border-color:var(--neon);box-shadow:inset 0 0 12px rgba(0,240,255,.18)}
+.nav-btn .ico{width:20px;text-align:center}
+.sidebar-foot{margin-top:auto;font-size:11px;color:var(--muted);text-align:center;opacity:.7}
+
+main{padding:28px 36px 80px;min-width:0}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:16px;flex-wrap:wrap}
+.topbar h1{margin:0;font-size:28px;letter-spacing:.3px}
+.topbar h1 small{color:var(--muted);font-weight:400;font-size:13px;display:block;margin-top:4px}
+.topbar-actions{display:flex;gap:10px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:var(--panel);border:1px solid var(--border);font-size:12px;font-weight:700}
+.chip.xp{color:var(--neon)}
+.chip.streak{color:var(--warn)}
+.chip.level{color:var(--neon-2)}
+.icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--panel);color:var(--text);cursor:pointer;font-size:16px;display:grid;place-items:center}
+.icon-btn:hover{border-color:var(--neon);color:var(--neon);box-shadow:0 0 12px rgba(0,240,255,.3)}
+
+/* ============== CARDS ============== */
+.card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:20px;backdrop-filter:blur(14px);box-shadow:var(--shadow)}
+.grid{display:grid;gap:16px}
+.grid.cols-3{grid-template-columns:repeat(3,1fr)}
+.grid.cols-2{grid-template-columns:repeat(2,1fr)}
+.grid.cols-4{grid-template-columns:repeat(4,1fr)}
+.stat{position:relative;overflow:hidden}
+.stat .label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:1px}
+.stat .value{font-size:32px;font-weight:800;margin-top:6px;background:linear-gradient(90deg,var(--neon),var(--neon-2));-webkit-background-clip:text;color:transparent}
+.stat .sub{color:var(--muted);font-size:12px;margin-top:4px}
+.progress{height:8px;background:rgba(120,120,255,.15);border-radius:999px;overflow:hidden;margin-top:10px}
+.progress .bar{height:100%;background:linear-gradient(90deg,var(--neon),var(--neon-2));border-radius:999px;box-shadow:0 0 12px var(--neon);transition:width .6s}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;border:1px solid var(--neon);background:linear-gradient(90deg,rgba(0,240,255,.15),rgba(255,43,214,.15));color:var(--text);font-weight:700;cursor:pointer;font-size:14px;transition:all .2s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,240,255,.25)}
+.btn.ghost{background:transparent;border-color:var(--border);color:var(--muted)}
+.btn.ghost:hover{color:var(--text);border-color:var(--neon)}
+.btn.good{border-color:var(--good);background:rgba(39,245,154,.12);color:var(--good)}
+.btn.bad{border-color:var(--bad);background:rgba(255,77,109,.12);color:var(--bad)}
+
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--border);margin-bottom:18px;flex-wrap:wrap}
+.tab{padding:10px 16px;cursor:pointer;color:var(--muted);font-weight:600;border-bottom:2px solid transparent;font-size:14px}
+.tab.active{color:var(--neon);border-color:var(--neon)}
+
+.topic-card{cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.topic-card:hover{transform:translateY(-3px);border-color:var(--neon);box-shadow:0 12px 30px rgba(0,240,255,.2)}
+.topic-card h3{margin:0 0 6px;font-size:16px}
+.topic-card .meta{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.badge{display:inline-block;padding:3px 8px;border-radius:6px;font-size:10px;font-weight:700;background:rgba(124,92,255,.2);color:var(--neon-3);text-transform:uppercase;letter-spacing:.5px}
+.badge.done{background:rgba(39,245,154,.15);color:var(--good)}
+
+/* Flashcard */
+.flash-wrap{display:flex;flex-direction:column;align-items:center;gap:20px;padding:20px 0}
+.flashcard{width:min(520px,100%);height:280px;perspective:1200px;cursor:pointer}
+.flashcard-inner{position:relative;width:100%;height:100%;transition:transform .7s;transform-style:preserve-3d}
+.flashcard.flipped .flashcard-inner{transform:rotateY(180deg)}
+.flashcard-face{position:absolute;inset:0;border-radius:18px;padding:30px;display:grid;place-items:center;text-align:center;backface-visibility:hidden;border:1px solid var(--border);background:linear-gradient(135deg,rgba(0,240,255,.1),rgba(124,92,255,.12));box-shadow:0 12px 40px rgba(0,240,255,.15)}
+.flashcard-face.back{transform:rotateY(180deg);background:linear-gradient(135deg,rgba(255,43,214,.12),rgba(124,92,255,.12))}
+.flashcard-face .q{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:14px}
+.flashcard-face .t{font-size:20px;font-weight:600;line-height:1.4}
+.flash-controls{display:flex;gap:10px;align-items:center}
+
+/* Quiz */
+.quiz-q{font-size:18px;font-weight:600;margin-bottom:14px;line-height:1.4}
+.choice{padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--panel-2);cursor:pointer;margin-bottom:10px;transition:all .2s;font-size:14px}
+.choice:hover{border-color:var(--neon);transform:translateX(4px)}
+.choice.correct{border-color:var(--good);background:rgba(39,245,154,.15);animation:popIn .4s}
+.choice.wrong{border-color:var(--bad);background:rgba(255,77,109,.15);animation:shake .4s}
+.choice.disabled{cursor:default;opacity:.6}
+@keyframes popIn{0%{transform:scale(.95)}50%{transform:scale(1.03)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.explain{margin-top:12px;padding:12px;border-radius:8px;background:rgba(124,92,255,.1);border-left:3px solid var(--neon-3);font-size:13px;color:var(--muted)}
+
+/* Exam */
+.exam-q{padding:16px;border-radius:12px;background:var(--panel-2);border:1px solid var(--border);margin-bottom:14px}
+.exam-q .marks{float:right;background:var(--neon-3);color:#fff;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700}
+.exam-q textarea{width:100%;min-height:90px;margin-top:10px;padding:10px;border-radius:8px;background:var(--bg-2);color:var(--text);border:1px solid var(--border);font-family:inherit;resize:vertical}
+.exam-q .model{display:none;margin-top:10px;padding:12px;border-radius:8px;background:rgba(39,245,154,.08);border-left:3px solid var(--good);font-size:13px;white-space:pre-wrap}
+.exam-q.show .model{display:block}
+
+/* Notes */
+.notes h3{color:var(--neon);margin-top:18px}
+.notes p,.notes li{line-height:1.65;color:var(--text)}
+.notes .tip{padding:12px;border-radius:8px;background:rgba(255,176,32,.1);border-left:3px solid var(--warn);margin:12px 0;font-size:14px}
+.notes .danger{padding:12px;border-radius:8px;background:rgba(255,77,109,.1);border-left:3px solid var(--bad);margin:12px 0;font-size:14px}
+
+/* Glossary */
+.glossary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.term{padding:14px;border-radius:12px;background:var(--panel-2);border:1px solid var(--border)}
+.term .name{font-weight:800;color:var(--neon);margin-bottom:4px}
+.search{width:100%;padding:12px 16px;border-radius:10px;background:var(--panel);border:1px solid var(--border);color:var(--text);font-size:14px;margin-bottom:18px}
+.search:focus{outline:none;border-color:var(--neon);box-shadow:0 0 0 3px rgba(0,240,255,.15)}
+
+/* Achievements */
+.ach{padding:18px;border-radius:14px;text-align:center;background:var(--panel-2);border:1px solid var(--border);transition:all .25s}
+.ach.unlocked{border-color:var(--warn);background:linear-gradient(180deg,rgba(255,176,32,.15),rgba(255,43,214,.08));box-shadow:0 0 24px rgba(255,176,32,.25)}
+.ach .em{font-size:40px}
+.ach .nm{font-weight:700;margin-top:6px}
+.ach .ds{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;padding:14px 20px;border-radius:12px;background:linear-gradient(90deg,var(--neon),var(--neon-2));color:#000;font-weight:700;z-index:200;box-shadow:0 10px 30px rgba(0,240,255,.4);animation:slideUp .4s}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* Mobile */
+.menu-toggle{display:none}
+@media(max-width:900px){
+.app{grid-template-columns:1fr}
+aside.sidebar{position:fixed;left:-280px;transition:left .3s;width:260px}
+aside.sidebar.open{left:0}
+main{padding:20px 16px 60px}
+.menu-toggle{display:grid}
+.grid.cols-3,.grid.cols-4{grid-template-columns:1fr}
+.grid.cols-2{grid-template-columns:1fr}
+}
+
+/* Topic list */
+.subtopics{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:12px}
+.sub-item{padding:12px 14px;border-radius:10px;background:var(--panel-2);border:1px solid var(--border);cursor:pointer;font-size:13px;display:flex;justify-content:space-between;align-items:center;transition:all .2s}
+.sub-item:hover{border-color:var(--neon);color:var(--neon);transform:translateX(4px)}
+.sub-item .check{color:var(--good);opacity:0}
+.sub-item.done .check{opacity:1}
+
+.crumbs{font-size:13px;color:var(--muted);margin-bottom:14px}
+.crumbs a{color:var(--neon);cursor:pointer;text-decoration:none}
+.crumbs a:hover{text-decoration:underline}
+
+/* level ring */
+.ring{position:relative;width:120px;height:120px;margin:0 auto}
+.ring svg{transform:rotate(-90deg)}
+.ring .lbl{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ring .lbl b{display:block;font-size:24px;background:linear-gradient(90deg,var(--neon),var(--neon-2));-webkit-background-clip:text;color:transparent}
+.ring .lbl span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+
+/* Enhancement UI */
+.global-search{position:relative;flex:1;min-width:240px;max-width:560px}
+.global-search input{width:100%;margin:0;padding:11px 42px 11px 40px;border-radius:12px;background:var(--panel);border:1px solid var(--border);color:var(--text);font:inherit;transition:.2s}
+.global-search input:focus{outline:none;border-color:var(--neon);box-shadow:0 0 0 3px rgba(0,240,255,.12)}
+.global-search .sico{position:absolute;left:14px;top:11px;color:var(--neon)}
+.search-results{display:none;position:absolute;top:48px;left:0;right:0;max-height:420px;overflow:auto;padding:8px;background:var(--bg-2);border:1px solid var(--border);border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,.45);z-index:150}
+.search-results.open{display:block}.search-result{padding:11px;border-radius:9px;cursor:pointer;border:1px solid transparent}.search-result:hover{background:var(--panel-2);border-color:var(--neon)}
+.search-result b{display:block;font-size:13px}.search-result small{display:block;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.result-type{float:right;color:var(--neon-2);font-size:10px;text-transform:uppercase;letter-spacing:.7px}
+.accordion{margin:10px 0;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--panel-2)}
+.accordion summary{padding:14px 16px;cursor:pointer;font-weight:700;color:var(--neon);list-style:none;display:flex;justify-content:space-between}.accordion summary::after{content:'＋';transition:.2s}.accordion[open] summary::after{transform:rotate(45deg)}.accordion-body{padding:0 16px 16px;border-top:1px solid var(--border)}
+.compare-wrap{overflow-x:auto}.compare{width:100%;border-collapse:collapse;margin-top:12px}.compare th,.compare td{padding:11px;text-align:left;border:1px solid var(--border);vertical-align:top}.compare th{color:var(--neon);background:rgba(0,240,255,.07)}
+.tool-card{min-height:190px;display:flex;flex-direction:column}.tool-card .tool-icon{font-size:30px}.tool-card p{color:var(--muted);font-size:13px;line-height:1.5;flex:1}.tool-stage{margin-top:18px;animation:popIn .3s}
+.timer{font-size:42px;font-weight:900;color:var(--neon);font-variant-numeric:tabular-nums}.heatmap{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:8px}.heat-cell{padding:12px;border-radius:10px;border:1px solid var(--border);font-size:12px}.mastery{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px}.medal{font-size:20px;float:right}
+.exam-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.exam-guide{padding:10px;border-radius:8px;background:rgba(0,240,255,.06);font-size:12px;color:var(--muted)}
+@media(max-width:900px){.topbar{align-items:stretch}.topbar>div:first-child{width:100%}.global-search{order:3;max-width:none;width:100%}.topbar-actions{width:100%;overflow-x:auto;padding-bottom:3px}.exam-meta{grid-template-columns:1fr}.flash-controls{flex-wrap:wrap;justify-content:center}}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+<div class="logo"><div class="logo-mark"></div><span>Revise<b>Pro</b></span></div>
+<div class="nav-btn active" data-view="dashboard"><span class="ico">⌂</span> Dashboard</div>
+<div class="nav-btn" data-view="topics"><span class="ico">▣</span> OCR J277 Topics</div>
+<div class="nav-btn" data-view="flashcards"><span class="ico">▤</span> Flashcards</div>
+<div class="nav-btn" data-view="quizzes"><span class="ico">◈</span> Quizzes</div>
+<div class="nav-btn" data-view="exam"><span class="ico">✎</span> Exam Questions</div>
+<div class="nav-btn" data-view="glossary"><span class="ico">⌕</span> Glossary</div>
+<div class="nav-btn" data-view="tools"><span class="ico">✦</span> Tools</div>
+<div class="nav-btn" data-view="progress"><span class="ico">▲</span> Progress</div>
+<div class="nav-btn" data-view="settings"><span class="ico">⚙</span> Settings</div>
+<div class="sidebar-foot">RevisePro v1.0 · OCR J277</div>
+</aside>
+
+<main>
+<div class="topbar">
+<div style="display:flex;align-items:center;gap:12px">
+<button class="icon-btn menu-toggle" id="menuToggle">☰</button>
+<h1 id="pageTitle">Dashboard<small id="pageSub">Welcome back, keep your streak alive!</small></h1>
+</div>
+<div class="global-search" id="globalSearch"><span class="sico">⌕</span><input id="globalSearchInput" type="search" autocomplete="off" placeholder="Search all J277 content…" aria-label="Search all revision content"><div class="search-results" id="searchResults"></div></div>
+<div class="topbar-actions">
+<span class="chip xp">✦ <span id="xpChip">0</span> XP</span>
+<span class="chip streak">🔥 <span id="streakChip">0</span> day</span>
+<span class="chip level">★ <span id="levelChip">Beginner</span></span>
+<button class="icon-btn" id="themeToggle" title="Toggle theme">◐</button>
+</div>
+</div>
+<div id="view"></div>
+</main>
+</div>
+
+<script>
+/* ============================================================
+DATA: OCR J277 SPEC — topics, notes, flashcards, quizzes, exam Qs
+============================================================ */
+const SPEC = {
+"Paper 1: Computer Systems": {
+"1.1 Systems Architecture": ["CPU","Fetch Decode Execute cycle","Registers","Cache","Embedded systems"],
+"1.2 Memory and Storage": ["RAM","ROM","Virtual memory","Secondary storage","Optical storage","Magnetic storage","Solid state storage"],
+"1.3 Computer Networks": ["LAN","WAN","Network hardware","Protocols","Ethernet","Wireless networks"],
+"1.4 Network Security": ["Malware","Phishing","Brute force attacks","Encryption","Firewalls","User access levels"],
+"1.5 Systems Software": ["Operating systems","Utility software","File management","User interfaces"],
+"1.6 Ethical, Legal, Cultural & Environmental": ["Copyright","Data protection","Computer misuse","Environmental impact","Digital divide"]
+},
+"Paper 2: Computational Thinking": {
+"2.1 Algorithms": ["Algorithms","Flowcharts","Pseudocode","Linear search","Binary search","Bubble sort","Merge sort","Insertion sort"],
+"2.2 Programming Fundamentals": ["Variables","Constants","Data types","Selection","Iteration","Arrays","Functions","Procedures","Operators"],
+"2.3 Producing Robust Programs": ["Defensive programming","Validation","Authentication","Testing","Error handling"],
+"2.4 Boolean Logic": ["AND","OR","NOT","Truth tables","Logic circuits"],
+"2.5 Programming Languages": ["Translators","Compilers","Interpreters","IDEs"]
+}
+};
+
+/* Detailed notes / flashcards / quizzes / exam questions per subtopic.
+Comprehensive set; default template fills for any sub not custom-written. */
+const CONTENT = {
+"CPU":{
+notes:`<h3>Definition</h3><p>The <b>CPU (Central Processing Unit)</b> is the part of a computer that processes instructions. It executes programs by repeatedly carrying out the <b>fetch–decode–execute</b> cycle.</p>
+<h3>Key Components</h3><ul><li><b>ALU</b> – performs arithmetic and logical operations.</li><li><b>CU (Control Unit)</b> – sends signals to coordinate the CPU.</li><li><b>Registers</b> – tiny, fast storage locations inside the CPU.</li><li><b>Cache</b> – fast memory between CPU and RAM.</li></ul>
+<h3>Performance Factors</h3><ul><li><b>Clock speed</b> – cycles per second (Hz). Higher = faster.</li><li><b>Number of cores</b> – more cores allow parallel processing.</li><li><b>Cache size</b> – more cache reduces RAM trips.</li></ul>
+<div class="tip">💡 Exam tip: When asked "how does X improve performance?", always link the change back to the FDE cycle — e.g. "more cache means fewer fetches from slower RAM, so more instructions per second."</div>
+<div class="danger">⚠ Common mistake: Confusing clock speed (Hz) with RAM capacity (GB). They measure different things.</div>`,
+flash:[["What does CPU stand for?","Central Processing Unit."],
+["What three things does the CPU do each cycle?","Fetch, decode and execute instructions."],
+["What is the ALU?","Arithmetic Logic Unit – performs arithmetic and logical operations."],
+["What does the Control Unit do?","Sends control signals to coordinate the CPU's operations."],
+["Name three factors affecting CPU performance.","Clock speed, number of cores, cache size."],
+["What is a core?","An independent processing unit inside a CPU that can run its own FDE cycle."]],
+quiz:[
+["What does CPU stand for?",["Central Processing Unit","Computer Power Unit","Central Program Unit","Core Processor Utility"],0,"CPU = Central Processing Unit."],
+["Which CPU component performs calculations?",["ALU","CU","Cache","Register"],0,"The Arithmetic Logic Unit handles maths and logic."],
+["Increasing clock speed will…",["…decrease performance","…increase instructions per second","…have no effect","…reduce cache"],1,"Higher Hz = more FDE cycles per second."],
+["More cores allow…",["Parallel processing","Slower memory","Bigger files","Cooler CPU"],0,"Each core executes its own instruction stream."],
+["The CU stands for…",["Control Unit","Compute Unit","Cache Unit","Core Unit"],0,"Control Unit coordinates CPU activity."]],
+exam:[[1,"State what the letters CPU stand for.","Central Processing Unit. (1)"],
+[3,"Describe the role of the CPU in a computer system.","The CPU processes instructions (1). It does this through the fetch–decode–execute cycle (1). It is the main component that runs all software/programs (1)."],
+[6,"Discuss how clock speed, cache size and number of cores affect CPU performance.","Clock speed measured in Hz determines how many FDE cycles per second; higher = faster (2). Cache is fast memory storing frequently used data; larger cache means fewer slow trips to RAM (2). More cores allow multiple instructions to be executed simultaneously (parallel processing), improving multitasking performance (2)."]]
+},
+"Fetch Decode Execute cycle":{
+notes:`<h3>The Cycle</h3><ol><li><b>Fetch</b> – the next instruction is copied from RAM into a register inside the CPU.</li><li><b>Decode</b> – the Control Unit works out what the instruction means.</li><li><b>Execute</b> – the instruction is carried out (e.g. ALU does a calculation).</li></ol><p>The cycle then repeats — billions of times per second.</p>
+<div class="tip">💡 Always mention this is repeated continuously.</div>`,
+flash:[["What are the three stages of the FDE cycle?","Fetch, Decode, Execute."],
+["Where are instructions fetched from?","From RAM/main memory."],
+["Which CPU part decodes instructions?","The Control Unit (CU)."],
+["What happens in the execute stage?","The instruction is carried out, often by the ALU."]],
+quiz:[["What is the first stage of the cycle?",["Fetch","Decode","Execute","Store"],0,"Always fetch first."],
+["Where is the instruction fetched from?",["RAM","Hard disk","Cache only","ROM"],0,"From main memory (RAM)."],
+["Decoding is done by…",["The Control Unit","The ALU","The Cache","The Register"],0,"CU interprets instructions."]],
+exam:[[3,"Describe the fetch–decode–execute cycle.","Fetch: instruction copied from RAM to CPU (1). Decode: CU works out what the instruction means (1). Execute: the instruction is carried out (1)."]]
+},
+"Registers":{
+notes:`<h3>What are registers?</h3><p>Registers are very small, very fast storage locations inside the CPU used during the FDE cycle.</p>
+<h3>Key registers (J277)</h3><ul><li><b>PC (Program Counter)</b> – holds the address of the next instruction.</li><li><b>MAR (Memory Address Register)</b> – holds the address being read/written.</li><li><b>MDR (Memory Data Register)</b> – holds data being transferred to/from memory.</li><li><b>Accumulator (ACC)</b> – stores results from the ALU.</li></ul>`,
+flash:[["What does PC stand for?","Program Counter – holds the address of the next instruction."],
+["What does MAR hold?","The memory address that is being read or written to."],
+["What does MDR hold?","The data being transferred to/from memory."],
+["What does the Accumulator do?","Stores the result of calculations from the ALU."]],
+quiz:[["Which register stores the address of the next instruction?",["PC","MAR","MDR","ACC"],0,"Program Counter."],
+["Where is the result of an ALU calculation stored?",["Accumulator","MAR","PC","Cache"],0,"The ACC holds intermediate results."]],
+exam:[[4,"Describe the purpose of the PC, MAR, MDR and ACC.","PC holds address of next instruction (1). MAR holds address being accessed (1). MDR holds data being transferred (1). ACC stores results of ALU operations (1)."]]
+},
+"Cache":{
+notes:`<h3>Cache</h3><p>Cache is a small amount of very fast memory built into (or close to) the CPU. It stores frequently used instructions and data so the CPU doesn't have to fetch them from slower RAM.</p>
+<h3>Levels</h3><ul><li><b>L1</b> – smallest, fastest, on the CPU core.</li><li><b>L2</b> – larger, slightly slower.</li><li><b>L3</b> – largest, shared between cores.</li></ul>
+<div class="tip">More cache → fewer cache misses → faster performance.</div>`,
+flash:[["Why is cache used?","To store frequently used data so the CPU doesn't have to fetch from slower RAM."],
+["Which cache level is fastest?","L1 cache."],
+["What is a cache miss?","When the data the CPU needs is not in the cache, so it must fetch from RAM."]],
+quiz:[["Cache is…",["Slower than RAM","Faster than RAM","The same as ROM","Permanent storage"],1,"Cache is faster than RAM."],
+["Which cache is closest to the CPU core?",["L1","L2","L3","L4"],0,"L1 is smallest and fastest."]],
+exam:[[3,"Explain how cache memory improves CPU performance.","Cache stores frequently used instructions/data (1) which can be accessed faster than RAM (1) so the CPU spends less time waiting for instructions, increasing the number of instructions executed per second (1)."]]
+},
+"Embedded systems":{
+notes:`<h3>Embedded systems</h3><p>A computer system built into a larger device to perform a specific, dedicated task. Examples: washing machines, microwaves, traffic lights, car engine management.</p>
+<h3>Features</h3><ul><li>Dedicated function</li><li>Often low power</li><li>Usually has firmware (software stored in ROM)</li><li>Cheaper and more reliable than general-purpose computers</li></ul>`,
+flash:[["What is an embedded system?","A computer built into a device to perform a dedicated task."],
+["Give two examples of embedded systems.","Washing machine, microwave, traffic light, car engine ECU."]],
+quiz:[["Which is an embedded system?",["Laptop","Washing machine controller","Desktop PC","Server"],1,"Washing machines have dedicated controllers."],
+["Embedded systems usually have…",["A general purpose OS","Firmware in ROM","Multiple monitors","A keyboard"],1,"Firmware is stored in ROM."]],
+exam:[[2,"Define the term 'embedded system' and give an example.","A computer built into a larger device to perform a dedicated task (1), e.g. a microwave controller (1)."]]
+},
+"RAM":{
+notes:`<h3>RAM</h3><p><b>Random Access Memory</b> is volatile main memory. It stores the OS, applications and data currently in use. Contents are lost when power is removed.</p>
+<div class="tip">More RAM = more programs can run simultaneously without slowing the system down (less reliance on virtual memory).</div>`,
+flash:[["Is RAM volatile or non-volatile?","Volatile – contents lost when power is off."],
+["What is stored in RAM?","The OS, currently running programs and data in use."]],
+quiz:[["RAM is…",["Volatile","Non-volatile","Read-only","Permanent"],0,"RAM loses data when power off."],
+["Adding more RAM allows…",["Faster CPU clock","Running more programs at once","Bigger hard disk","Brighter screen"],1,"More space for processes."]],
+exam:[[3,"Explain the purpose of RAM in a computer system.","RAM stores currently running programs and data (1), is volatile so loses data when power off (1), and is faster than secondary storage so the CPU can access data quickly (1)."]]
+},
+"ROM":{
+notes:`<h3>ROM</h3><p><b>Read-Only Memory</b> is non-volatile memory that stores the <b>bootloader / BIOS</b> – the first instructions the CPU runs when the computer turns on.</p>`,
+flash:[["Is ROM volatile?","No – it keeps its contents when power is removed."],
+["What is stored in ROM?","The bootloader / BIOS used to start the computer."]],
+quiz:[["ROM is used to store…",["The OS","User files","The bootloader","Web pages"],2,"It holds the start-up instructions."]],
+exam:[[2,"Describe the purpose of ROM.","ROM is non-volatile (1) and stores the bootloader/BIOS used to start the computer (1)."]]
+},
+"Virtual memory":{
+notes:`<h3>Virtual memory</h3><p>When RAM is full, the OS uses part of the hard disk as "extra" RAM. Inactive pages of data are swapped out to disk and brought back when needed.</p>
+<div class="danger">Virtual memory is much slower than real RAM because disks are slow.</div>`,
+flash:[["What is virtual memory?","Part of secondary storage used as extra RAM when RAM is full."],
+["Why is virtual memory slower than RAM?","Because secondary storage is much slower than RAM."]],
+quiz:[["Virtual memory uses…",["Cache","Secondary storage","ROM","CPU registers"],1,"It uses the hard disk."]],
+exam:[[3,"Explain how virtual memory works.","When RAM is full (1) the OS moves inactive data to secondary storage (1) and brings it back to RAM when needed, allowing more programs to run than RAM would normally allow (1)."]]
+},
+"Secondary storage":{
+notes:`<h3>Secondary storage</h3><p>Non-volatile storage used to keep programs and data long-term. Examples: HDD, SSD, USB stick, DVD.</p>
+<h3>Choosing storage</h3><p>Compare on: capacity, speed, portability, durability, cost per GB, reliability.</p>`,
+flash:[["Why is secondary storage needed?","To keep data long-term, even when the computer is off."],
+["Name 3 factors when choosing storage.","Capacity, speed, cost, portability, durability."]],
+quiz:[["Which is secondary storage?",["RAM","ROM","SSD","Cache"],2,"SSD is non-volatile long-term storage."]],
+exam:[[4,"A school is choosing between an SSD and an HDD for student PCs. Discuss the considerations.","HDD: cheaper per GB, larger capacities available (1) but slower, mechanical parts so less durable (1). SSD: much faster, silent, more durable (1) but more expensive per GB (1)."]]
+},
+"Optical storage":{
+notes:`<h3>Optical (CD/DVD/Blu-ray)</h3><p>Data stored as pits and lands on a disc, read by a laser.</p>
+<p><b>Pros:</b> cheap, portable, durable. <b>Cons:</b> low capacity, slow, scratches easily.</p>`,
+flash:[["How is data read on optical media?","A laser reflects off pits and lands on the disc surface."],
+["Give a disadvantage of optical storage.","Low capacity, slow, easily scratched."]],
+quiz:[["A DVD is an example of…",["Magnetic storage","Optical storage","Solid state","Cloud"],1,"DVDs use lasers."]],
+exam:[[2,"State two advantages of optical storage.","Cheap to produce (1); portable / easy to distribute (1)."]]
+},
+"Magnetic storage":{
+notes:`<h3>Magnetic (HDD)</h3><p>Data stored as magnetised regions on spinning platters. A read/write head moves above the platter.</p>
+<p><b>Pros:</b> very high capacity, low cost per GB. <b>Cons:</b> mechanical parts → slower, fragile, noisy.</p>`,
+flash:[["How does an HDD store data?","Magnetising regions on spinning metal platters."],
+["Why are HDDs less durable than SSDs?","HDDs contain moving mechanical parts that can break."]],
+quiz:[["HDDs store data by…",["Lasers","Magnetism","Electrons in flash cells","Punch holes"],1,"Magnetic platters."]],
+exam:[[3,"Compare magnetic and solid state storage.","Magnetic has higher capacity per £ (1); SSD has no moving parts so faster and more durable (1); SSD is silent and uses less power (1)."]]
+},
+"Solid state storage":{
+notes:`<h3>SSD / Flash</h3><p>Uses electronic flash memory cells with no moving parts. Used in SSDs, USB sticks, SD cards.</p>
+<p><b>Pros:</b> fast, silent, durable, low power. <b>Cons:</b> more expensive per GB, limited write cycles.</p>`,
+flash:[["What is solid state storage made of?","Flash memory cells – no moving parts."],
+["Give two advantages of SSD over HDD.","Faster, more durable, silent, lower power."]],
+quiz:[["A USB memory stick is…",["Magnetic","Optical","Solid state","Cache"],2,"Flash memory."]],
+exam:[[2,"State two reasons SSDs are used in laptops.","Faster boot/load times (1); more durable to being dropped (1)."]]
+},
+"LAN":{
+notes:`<h3>LAN</h3><p><b>Local Area Network</b> – computers connected over a small geographic area (one building/site). Hardware is usually owned by the organisation.</p>`,
+flash:[["What does LAN stand for?","Local Area Network."],
+["Give an example of a LAN.","A school or office network."]],
+quiz:[["A school network is a…",["LAN","WAN","PAN","MAN"],0,"Local Area Network."]],
+exam:[[2,"Describe two characteristics of a LAN.","Covers a small geographic area (1); hardware owned by the organisation (1)."]]
+},
+"WAN":{
+notes:`<h3>WAN</h3><p><b>Wide Area Network</b> – connects computers over a large geographic area (the Internet is the biggest WAN). Uses third-party infrastructure (telecoms/ISPs).</p>`,
+flash:[["What is a WAN?","A Wide Area Network covering a large geographic area."],
+["Give an example of a WAN.","The Internet."]],
+quiz:[["The Internet is an example of…",["LAN","WAN","PAN","Bus"],1,"World's largest WAN."]],
+exam:[[2,"Give one difference between a LAN and a WAN.","A LAN covers a small area / single site (1); a WAN covers a large geographic area and uses third-party infrastructure (1)."]]
+},
+"Network hardware":{
+notes:`<h3>Hardware</h3><ul><li><b>NIC</b> – network interface card, connects device to network.</li><li><b>Switch</b> – connects devices on a LAN, sends data to the correct device.</li><li><b>Router</b> – connects different networks (e.g. LAN to WAN), routes packets.</li><li><b>Wireless Access Point</b> – allows wireless devices to connect.</li><li><b>Transmission media</b> – copper cable, fibre optic, radio waves.</li></ul>`,
+flash:[["What does NIC stand for?","Network Interface Card."],
+["What does a router do?","Connects networks together and routes data packets between them."],
+["What is a switch?","Hardware that connects devices on a LAN and sends data only to the destination device."]],
+quiz:[["Which device connects a LAN to the Internet?",["Switch","Router","NIC","Hub"],1,"Routers connect networks."],
+["A switch sends data to…",["All devices","Only the destination device","The router only","No devices"],1,"Switches use MAC addresses."]],
+exam:[[3,"Describe the role of a router, switch and NIC.","Router: connects different networks and routes packets (1). Switch: connects devices on a LAN and forwards data to the correct one (1). NIC: lets a device physically connect to the network (1)."]]
+},
+"Protocols":{
+notes:`<h3>Protocols</h3><p>A set of rules governing communication between devices.</p>
+<ul><li><b>TCP/IP</b> – core internet protocol suite.</li><li><b>HTTP/HTTPS</b> – web pages (S = secure, encrypted).</li><li><b>FTP</b> – file transfer.</li><li><b>SMTP</b> – sending email.</li><li><b>POP3/IMAP</b> – receiving email.</li></ul>`,
+flash:[["What is a protocol?","A set of rules for communication between devices."],
+["What is HTTPS used for?","Secure (encrypted) transfer of web pages."],
+["What does SMTP do?","Sends emails."],
+["Difference between POP3 and IMAP?","POP3 downloads and removes from server; IMAP keeps email on the server and syncs."]],
+quiz:[["What does HTTP stand for?",["HyperText Transfer Protocol","High Transfer Text Protocol","Home Text Transmission Protocol","Hyper Test Tunnel Protocol"],0,"HyperText Transfer Protocol."],
+["Which protocol is used to send email?",["POP3","IMAP","SMTP","FTP"],2,"SMTP = Send Mail."]],
+exam:[[4,"State the purpose of HTTPS, FTP, SMTP and IMAP.","HTTPS: secure web page transfer (1). FTP: file transfer (1). SMTP: sending email (1). IMAP: receiving/syncing email on server (1)."]]
+},
+"Ethernet":{
+notes:`<h3>Ethernet</h3><p>Family of wired networking technologies, defined by IEEE 802.3. Uses cables (e.g. Cat5/Cat6) and switches to connect devices on a LAN.</p>`,
+flash:[["What is Ethernet?","A wired networking standard for LANs."],
+["Is Ethernet wired or wireless?","Wired."]],
+quiz:[["Ethernet is a…",["Wireless standard","Wired LAN standard","Mobile network","Web protocol"],1,"Wired LAN."]],
+exam:[[2,"State two advantages of Ethernet over Wi-Fi.","Faster / more reliable speeds (1); more secure as cables are physical (1)."]]
+},
+"Wireless networks":{
+notes:`<h3>Wi-Fi</h3><p>Wireless networking using radio waves (IEEE 802.11). Convenient but slower and less secure than wired. Use <b>WPA2/WPA3</b> encryption and strong passwords.</p>`,
+flash:[["What standard does Wi-Fi use?","IEEE 802.11."],
+["Name an encryption standard for Wi-Fi.","WPA2 or WPA3."]],
+quiz:[["Wi-Fi uses…",["Light","Radio waves","Magnetism","Electricity through cables"],1,"Radio waves."]],
+exam:[[3,"Compare wired and wireless networks.","Wired: faster, more reliable, more secure (1). Wireless: more convenient, allows mobility, no cabling (1). Wireless is generally slower and more vulnerable to interception (1)."]]
+},
+"Malware":{
+notes:`<h3>Malware</h3><p><b>Malicious software</b> designed to damage or gain unauthorised access.</p>
+<ul><li><b>Virus</b> – attaches to files, spreads when run.</li><li><b>Worm</b> – self-replicates across networks.</li><li><b>Trojan</b> – disguised as legitimate software.</li><li><b>Spyware</b> – secretly collects data.</li><li><b>Ransomware</b> – encrypts data and demands payment.</li></ul>`,
+flash:[["What is malware?","Malicious software designed to damage or gain unauthorised access."],
+["What does ransomware do?","Encrypts a victim's files and demands payment to decrypt."],
+["What is a Trojan?","Malware disguised as legitimate software."]],
+quiz:[["Which malware self-replicates over a network?",["Virus","Worm","Trojan","Spyware"],1,"Worms spread by themselves."],
+["Ransomware…",["Steals passwords","Encrypts data and demands money","Sends spam","Mines crypto"],1,"Then asks for payment."]],
+exam:[[4,"Describe four different forms of malware.","Virus: attaches to files and spreads when executed (1). Worm: self-replicates across networks (1). Trojan: disguised as legitimate software (1). Ransomware/Spyware: encrypts data for payment / secretly gathers information (1)."]]
+},
+"Phishing":{
+notes:`<h3>Phishing</h3><p>Social engineering attack that tricks users into giving away personal information, usually via emails pretending to be from a trusted source.</p>
+<h3>Prevention</h3><ul><li>Check sender address</li><li>Don't click suspicious links</li><li>Spam filters</li><li>User training</li></ul>`,
+flash:[["What is phishing?","Tricking users into giving away personal info via fake emails/messages."],
+["Name two phishing prevention methods.","User training, spam filters, checking sender addresses."]],
+quiz:[["Phishing usually uses…",["Emails","Hardware","Encryption","Compilers"],0,"Fake emails."]],
+exam:[[3,"Describe phishing and how it can be prevented.","Phishing is sending fake messages to trick users into revealing personal information (1). It can be prevented by user training (1) and using spam filters / checking links (1)."]]
+},
+"Brute force attacks":{
+notes:`<h3>Brute force</h3><p>Trying every possible password combination until the correct one is found.</p>
+<h3>Prevention</h3><ul><li>Strong passwords</li><li>Account lockouts after N attempts</li><li>CAPTCHAs</li><li>Two-factor authentication</li></ul>`,
+flash:[["What is a brute force attack?","Trying every possible password until the right one is found."],
+["How can brute force attacks be prevented?","Strong passwords, account lockouts, CAPTCHAs, 2FA."]],
+quiz:[["A brute force attack tries…",["One password","Every possible password","Encryption keys only","SQL"],1,"Every combination."]],
+exam:[[2,"Suggest two ways to defend against brute force attacks.","Lock account after N failed attempts (1); enforce strong/long passwords (1)."]]
+},
+"Encryption":{
+notes:`<h3>Encryption</h3><p>Scrambling data using a key so it can only be read by someone with the correct key. Even if intercepted, the data is unreadable.</p>
+<p>Used in: HTTPS, Wi-Fi (WPA2/3), messaging, stored files.</p>`,
+flash:[["What is encryption?","Scrambling data with a key so only someone with the key can read it."],
+["Give an example of where encryption is used.","HTTPS, WPA2 Wi-Fi, messaging apps."]],
+quiz:[["Encryption protects…",["Speed","Confidentiality","Storage size","CPU"],1,"Keeps data unreadable."]],
+exam:[[3,"Explain why encryption is used when sending data over the Internet.","Data can be intercepted in transit (1). Encryption scrambles the data using a key (1) so even if intercepted, an attacker without the key cannot read it (1)."]]
+},
+"Firewalls":{
+notes:`<h3>Firewall</h3><p>Hardware or software that monitors traffic entering/leaving a network and blocks anything that doesn't meet its rules.</p>`,
+flash:[["What does a firewall do?","Monitors and filters incoming/outgoing network traffic based on rules."],
+["Can a firewall be software?","Yes – it can be software, hardware, or both."]],
+quiz:[["A firewall is used to…",["Speed up the CPU","Filter network traffic","Encrypt files","Defrag the disk"],1,"Filters traffic."]],
+exam:[[2,"Describe what a firewall does.","Monitors traffic between a network and the outside (1) and blocks traffic that doesn't follow security rules (1)."]]
+},
+"User access levels":{
+notes:`<h3>User access levels</h3><p>Different users have different rights to data/features. E.g. a school: students can read homework, teachers can edit grades, admins can change passwords.</p>`,
+flash:[["What are user access levels?","Restrictions on what each user is allowed to see/do on a system."],
+["Why are access levels used?","To protect data from being seen/changed by unauthorised users."]],
+quiz:[["Access levels help to…",["Speed up Wi-Fi","Protect data","Encrypt RAM","Defragment storage"],1,"Restrict who can access what."]],
+exam:[[3,"Explain why a school would use user access levels on its network.","To stop students editing teacher data / grades (1). Different users have different needs (1). Reduces risk of accidental or malicious data changes (1)."]]
+},
+"Operating systems":{
+notes:`<h3>OS</h3><p>Software that manages hardware and provides services for applications.</p>
+<h3>Functions</h3><ul><li>User interface</li><li>Memory management & multitasking</li><li>Peripheral / device management</li><li>File management</li><li>User management</li><li>Security</li></ul>`,
+flash:[["Name 4 functions of an OS.","User interface, memory management, file management, peripheral management, security, user management."],
+["What is multitasking?","Running multiple programs apparently at the same time by sharing CPU time."]],
+quiz:[["Which is NOT an OS function?",["File management","Encryption of GPU","Memory management","Peripheral management"],1,"OSes don't 'encrypt the GPU'."]],
+exam:[[4,"Describe four functions of an operating system.","User interface to interact with the computer (1). Memory management – allocates RAM to programs (1). Peripheral management – drivers for devices (1). User management & security – accounts and permissions (1)."]]
+},
+"Utility software":{
+notes:`<h3>Utility software</h3><p>Software that performs maintenance/housekeeping tasks.</p>
+<ul><li><b>Defragmentation</b> – reorganises files on HDD for faster access.</li><li><b>Backup</b> – copies files for recovery.</li><li><b>Compression</b> – reduces file size.</li><li><b>Encryption</b> – scrambles data.</li><li><b>Antivirus / Anti-malware</b></li></ul>`,
+flash:[["What is defragmentation?","Reorganising files on a HDD so they're stored contiguously, making access faster."],
+["Name two utility programs.","Defragmenter, backup, antivirus, compression, encryption."]],
+quiz:[["Defragmentation is used on…",["SSDs","HDDs","RAM","Cache"],1,"Not needed on SSDs."]],
+exam:[[3,"Describe three pieces of utility software.","Defragmenter reorganises HDD files for speed (1). Backup software copies data so it can be recovered (1). Antivirus scans for and removes malware (1)."]]
+},
+"File management":{
+notes:`<h3>File management</h3><p>The OS organises files into folders, allows users to rename/move/delete/copy, controls access permissions, and tracks where files are stored.</p>`,
+flash:[["Give 3 things file management lets a user do.","Create, rename, move, copy, delete, set permissions."]],
+quiz:[["File management is provided by…",["The CPU","The OS","RAM","The router"],1,"OS feature."]],
+exam:[[2,"Describe two file management tasks performed by the OS.","Organising files into directories (1); controlling user permissions on files (1)."]]
+},
+"User interfaces":{
+notes:`<h3>User interfaces</h3><ul><li><b>GUI</b> – Graphical User Interface (windows, icons).</li><li><b>CLI</b> – Command Line Interface (text commands).</li><li><b>Menu driven</b> – e.g. cash machines.</li><li><b>Voice / NLI</b> – voice assistants.</li></ul>`,
+flash:[["What does GUI stand for?","Graphical User Interface."],
+["Give one advantage of a CLI.","Faster for experienced users; uses fewer resources."]],
+quiz:[["A CLI is…",["Graphical","Text-based","Voice-only","Menu-only"],1,"Command Line = text."]],
+exam:[[3,"Compare a GUI and a CLI.","GUI is easier for beginners – icons and windows (1). CLI uses less memory and can be faster for experts (1). GUI uses more system resources / graphics (1)."]]
+},
+"Copyright":{
+notes:`<h3>Copyright Designs and Patents Act 1988</h3><p>Protects the rights of creators of original works (software, music, text). Illegal to copy/distribute without permission.</p>`,
+flash:[["What is copyright?","Legal protection that gives creators control over how their work is used."],
+["Which law protects copyright in the UK?","Copyright Designs and Patents Act 1988."]],
+quiz:[["Copying software without permission breaks…",["Data Protection Act","Computer Misuse Act","Copyright Act","Equality Act"],2,"Copyright."]],
+exam:[[2,"Describe what the Copyright Designs and Patents Act protects.","Protects creators' rights over original works (1) and makes copying/distributing without permission illegal (1)."]]
+},
+"Data protection":{
+notes:`<h3>Data Protection Act 2018 / UK GDPR</h3><p>Controls how organisations use personal data. Must be: lawful, accurate, kept up to date, kept securely, used for stated purpose, not kept longer than needed.</p>`,
+flash:[["Which law covers personal data in the UK?","Data Protection Act 2018 (UK GDPR)."],
+["Name 2 principles of data protection.","Lawful use, accuracy, security, purpose limitation, storage limitation."]],
+quiz:[["Personal data must be kept…",["As long as possible","Only as long as needed","Forever","Sold yearly"],1,"Storage limitation principle."]],
+exam:[[3,"Describe three principles of the Data Protection Act.","Data must be accurate and up to date (1). Data must be kept secure (1). Data must only be used for the stated purpose (1)."]]
+},
+"Computer misuse":{
+notes:`<h3>Computer Misuse Act 1990</h3><p>Makes the following illegal: unauthorised access to data; unauthorised access with intent to commit further offences; unauthorised modification of data; making/supplying tools for hacking.</p>`,
+flash:[["Which act makes hacking illegal?","Computer Misuse Act 1990."],
+["Name an offence under the Computer Misuse Act.","Unauthorised access; unauthorised modification; making/supplying hacking tools."]],
+quiz:[["The Computer Misuse Act covers…",["Sharing music","Hacking","Filming","Driving"],1,"Hacking offences."]],
+exam:[[3,"State three offences covered by the Computer Misuse Act 1990.","Unauthorised access to data (1); unauthorised access with intent to commit further crime (1); unauthorised modification of data (1)."]]
+},
+"Environmental impact":{
+notes:`<h3>Environment</h3><p>Issues: energy use of data centres, e-waste, mining of rare materials. Mitigations: recycling, energy efficient hardware, cloud computing for shared resources.</p>`,
+flash:[["Give one environmental concern of computing.","E-waste, energy use of data centres, mining of rare metals."],
+["How can e-waste be reduced?","Recycling, repairing, upgrading instead of replacing."]],
+quiz:[["E-waste is…",["Spam emails","Discarded electronics","Wasted electricity","Used USBs sold"],1,"Old electronics."]],
+exam:[[3,"Discuss the environmental impact of computers.","Manufacturing uses rare materials – mining damages environment (1). Data centres use huge amounts of electricity (1). E-waste contains toxic materials and can pollute when not recycled (1)."]]
+},
+"Digital divide":{
+notes:`<h3>Digital divide</h3><p>The gap between people who do and don't have access to modern technology (often based on income, age, geography).</p>`,
+flash:[["What is the digital divide?","The gap between those with and without access to digital technology."]],
+quiz:[["Digital divide is mainly about…",["Wi-Fi speed","Access inequality","Pixel density","CPU speed"],1,"Access inequality."]],
+exam:[[3,"Explain the digital divide and one consequence of it.","Some people/regions have less access to technology and Internet than others (1), often due to cost or location (1). This means they cannot access online services such as education or government services (1)."]]
+},
+"Algorithms":{
+notes:`<h3>Algorithm</h3><p>A step-by-step set of instructions for solving a problem. Algorithms can be represented in pseudocode or flowcharts.</p>
+<h3>Computational thinking</h3><ul><li><b>Abstraction</b> – removing unnecessary detail.</li><li><b>Decomposition</b> – breaking a problem into smaller parts.</li><li><b>Algorithmic thinking</b> – step-by-step solutions.</li></ul>`,
+flash:[["What is an algorithm?","A step-by-step set of instructions for solving a problem."],
+["What is decomposition?","Breaking a problem into smaller, more manageable parts."],
+["What is abstraction?","Removing unnecessary detail from a problem."]],
+quiz:[["An algorithm is…",["A computer language","A step-by-step solution","A type of CPU","A storage device"],1,"Step-by-step solution."],
+["Which is computational thinking?",["Decomposition","Encryption","Compilation","Defragmentation"],0,"Decomposition is one of three."]],
+exam:[[4,"Define abstraction and decomposition and give an example of each.","Abstraction: removing irrelevant detail (1), e.g. a tube map ignores real distances (1). Decomposition: breaking a problem into smaller parts (1), e.g. splitting a game into menu, gameplay, scoring modules (1)."]]
+},
+"Flowcharts":{
+notes:`<h3>Flowchart symbols</h3><ul><li><b>Oval</b> – start/end</li><li><b>Rectangle</b> – process</li><li><b>Parallelogram</b> – input/output</li><li><b>Diamond</b> – decision</li><li><b>Arrow</b> – flow</li></ul>`,
+flash:[["What shape represents a decision?","A diamond."],
+["What shape represents input/output?","A parallelogram."]],
+quiz:[["A diamond in a flowchart means…",["Process","Decision","Input","Start"],1,"Decisions."]],
+exam:[[3,"Name three flowchart symbols and their purposes.","Oval – start/end (1). Rectangle – process (1). Diamond – decision (1)."]]
+},
+"Pseudocode":{
+notes:`<h3>Pseudocode</h3><p>A way of writing algorithms in plain English-like steps. OCR uses its own pseudocode style for exams.</p>
+<pre style="background:rgba(0,240,255,.05);padding:12px;border-radius:8px">num = input("Enter a number")
+if num > 10 then
+print("Big")
+else
+print("Small")
+endif</pre>`,
+flash:[["What is pseudocode?","An informal English-like way of writing algorithms."],
+["Give an OCR keyword used in pseudocode.","if / then / else / endif / for / while / endwhile."]],
+quiz:[["Pseudocode is…",["A real language","Informal code-like English","Machine code","Binary"],1,"Informal."]],
+exam:[[2,"State one advantage of pseudocode over a real programming language for designing algorithms.","Easier to read for humans (1) and not tied to syntax of one language (1)."]]
+},
+"Linear search":{
+notes:`<h3>Linear search</h3><p>Checks each item in a list one by one until the target is found or the list ends.</p>
+<p><b>Pros:</b> works on unsorted lists, simple. <b>Cons:</b> slow for big lists.</p>`,
+flash:[["How does linear search work?","Check each item one by one until you find the target."],
+["Does linear search require sorted data?","No."]],
+quiz:[["Linear search needs the list to be…",["Sorted","Unsorted is fine","Reversed","Encrypted"],1,"Any order works."]],
+exam:[[3,"Describe how a linear search works.","Start at the first item (1). Compare each item in turn with the target (1). Stop when found or when the end of the list is reached (1)."]]
+},
+"Binary search":{
+notes:`<h3>Binary search</h3><p>Repeatedly checks the middle item of a sorted list and discards the half that can't contain the target.</p>
+<p><b>Requires</b> the list to be <b>sorted</b>. Much faster than linear for large lists.</p>`,
+flash:[["What must a list be for binary search to work?","Sorted."],
+["How does binary search work?","Check the middle item; if not the target, discard the half that can't contain it; repeat."]],
+quiz:[["Binary search requires data to be…",["Sorted","Unsorted","Encrypted","Compressed"],0,"Sorted."],
+["Binary search is faster than linear because…",["It skips half the list each step","It uses the GPU","It's compiled","It uses cache"],0,"Halves the search space each iteration."]],
+exam:[[4,"Compare linear and binary search.","Linear: works on unsorted data, simple but slow on large lists (1). Binary: requires sorted data (1), much faster on large lists (1) because it halves the search space each step (1)."]]
+},
+"Bubble sort":{
+notes:`<h3>Bubble sort</h3><p>Repeatedly steps through the list, comparing adjacent pairs and swapping them if they're in the wrong order. Largest items "bubble" to the end. Repeats until no swaps are needed.</p>
+<p><b>Pros:</b> simple. <b>Cons:</b> slow on large lists.</p>`,
+flash:[["How does bubble sort work?","Compare adjacent pairs, swap if in wrong order; repeat until no swaps happen."],
+["Is bubble sort efficient on large lists?","No, it is one of the slowest sorting algorithms."]],
+quiz:[["Bubble sort compares…",["The first and last","Adjacent items","Random items","Middle and last"],1,"Adjacent pairs."]],
+exam:[[4,"Describe the steps of a bubble sort.","Start at the beginning of the list (1). Compare first two items, swap if in wrong order (1). Move to next pair and repeat to end of list (1). Repeat the whole pass until no swaps are made (1)."]]
+},
+"Merge sort":{
+notes:`<h3>Merge sort</h3><p>A "divide and conquer" sort. Split the list in half repeatedly until single items, then merge pairs back together in order.</p>
+<p>More efficient than bubble sort on large lists.</p>`,
+flash:[["How does merge sort work?","Split list in halves until single items, then merge them in order."],
+["Is merge sort faster than bubble sort?","Yes, on large lists."]],
+quiz:[["Merge sort uses…",["Divide and conquer","Brute force","Encryption","Compression"],0,"Divide and conquer."]],
+exam:[[3,"Describe how merge sort works.","Split list into halves recursively until each list has one item (1). Merge pairs of lists by comparing items and placing in order (1). Continue merging until one sorted list remains (1)."]]
+},
+"Insertion sort":{
+notes:`<h3>Insertion sort</h3><p>Builds a sorted list one item at a time by taking the next item and inserting it into its correct position in the already-sorted portion.</p>`,
+flash:[["How does insertion sort work?","Take each item and insert it into its correct position among the already-sorted items."]],
+quiz:[["Insertion sort builds the sorted list…",["All at once","One item at a time","Randomly","From the middle"],1,"One item at a time."]],
+exam:[[3,"Describe how insertion sort works.","Start from the second item (1). Compare to items before it and shift them right until correct position found (1). Repeat for each item in the list (1)."]]
+},
+"Variables":{
+notes:`<h3>Variables</h3><p>A named location in memory whose value <b>can change</b> while a program runs.</p>
+<pre style="background:rgba(0,240,255,.05);padding:12px;border-radius:8px">score = 0
+score = score + 1</pre>`,
+flash:[["What is a variable?","A named storage location whose value can change while the program runs."]],
+quiz:[["A variable's value can…",["Never change","Change during the program","Only be a number","Only be a string"],1,"That's the point."]],
+exam:[[2,"Define the term 'variable' and give an example.","A named memory location that stores a value which can change (1), e.g. score = 0 (1)."]]
+},
+"Constants":{
+notes:`<h3>Constants</h3><p>A named value that <b>cannot change</b> during execution. Used for values like π or VAT rate.</p>`,
+flash:[["What is a constant?","A named value whose value cannot change while the program runs."],
+["Why use constants?","Easier to read, easier to change in one place, prevents accidental modification."]],
+quiz:[["A constant…",["Can change","Cannot change","Is always a string","Is always 0"],1,"Fixed value."]],
+exam:[[3,"Explain why a programmer might use a constant instead of a variable.","To prevent the value being accidentally changed (1). Makes code easier to read with a meaningful name (1). Easier to update in one place if value ever needs changing (1)."]]
+},
+"Data types":{
+notes:`<h3>Common data types</h3><ul><li><b>Integer</b> – whole number (5)</li><li><b>Real / Float</b> – decimal (3.14)</li><li><b>Boolean</b> – True/False</li><li><b>Character</b> – single character ('A')</li><li><b>String</b> – text ("Hello")</li></ul>`,
+flash:[["Name 5 data types.","Integer, real/float, boolean, character, string."],
+["What can a Boolean store?","True or False."]],
+quiz:[["3.14 is what data type?",["Integer","Real","Boolean","Char"],1,"Decimal = real."],
+["'A' is what data type?",["String","Integer","Char","Boolean"],2,"Single character."]],
+exam:[[4,"State four data types and give an example of each.","Integer e.g. 5 (1). Real e.g. 3.14 (1). Boolean e.g. True (1). String e.g. \"hello\" (1)."]]
+},
+"Selection":{
+notes:`<h3>Selection</h3><p>Choosing which code to run based on a condition – <b>if / elif / else</b>.</p>
+<pre style="background:rgba(0,240,255,.05);padding:12px;border-radius:8px">if score > 50 then
+print("Pass")
+else
+print("Fail")
+endif</pre>`,
+flash:[["What is selection in programming?","Using conditional statements (if/else) to choose which code runs."]],
+quiz:[["Selection uses…",["for loops","if statements","arrays","print"],1,"if statements."]],
+exam:[[2,"Define 'selection' and give an example.","Choosing which code to run based on a condition (1), e.g. if score > 50 then print pass (1)."]]
+},
+"Iteration":{
+notes:`<h3>Iteration</h3><p>Repeating a block of code.</p>
+<ul><li><b>Count-controlled</b> – <code>for</code> (run N times).</li><li><b>Condition-controlled</b> – <code>while</code> / <code>do…until</code>.</li></ul>`,
+flash:[["What is iteration?","Repeating a block of code (a loop)."],
+["Difference between for and while loops?","for runs a known number of times; while runs while a condition is true."]],
+quiz:[["A for loop is…",["Condition controlled","Count controlled","Random","Recursive"],1,"Runs a set number of times."]],
+exam:[[3,"Compare count-controlled and condition-controlled iteration.","Count-controlled (for) runs a known number of times (1). Condition-controlled (while) runs while a condition is true (1). Use for when number of iterations is known, while otherwise (1)."]]
+},
+"Arrays":{
+notes:`<h3>Arrays</h3><p>A data structure that stores multiple values of the <b>same data type</b> under one name, accessed by index (usually starting at 0).</p>
+<pre style="background:rgba(0,240,255,.05);padding:12px;border-radius:8px">names = ["Ada","Alan","Grace"]
+print(names[1]) # Alan</pre>
+<h3>2D arrays</h3><p>An array of arrays – like a table (rows and columns). <code>grid[row][col]</code>.</p>`,
+flash:[["What is an array?","A data structure storing multiple values of the same type under one name."],
+["What is the first index in an array (usually)?","0."],
+["What is a 2D array?","An array of arrays – like a table with rows and columns."]],
+quiz:[["Array indices usually start at…",["0","1","-1","2"],0,"Zero-indexed."],
+["A 2D array is…",["A single list","A table of rows/columns","A type of file","A loop"],1,"Rows and columns."]],
+exam:[[3,"Describe what an array is and give an example use case.","An array stores multiple values of the same data type under one name (1) accessed using an index (1). E.g. storing 30 student scores in one variable instead of 30 separate variables (1)."]]
+},
+"Functions":{
+notes:`<h3>Functions</h3><p>A named block of code that performs a task and <b>returns a value</b>.</p>
+<pre style="background:rgba(0,240,255,.05);padding:12px;border-radius:8px">function double(n)
+return n * 2
+endfunction</pre>`,
+flash:[["What is a function?","A named block of code that performs a task and returns a value."],
+["Difference between a function and a procedure?","A function returns a value; a procedure does not."]],
+quiz:[["A function always…",["Returns a value","Prints","Saves a file","Encrypts"],0,"Returns a value."]],
+exam:[[3,"Explain the difference between a function and a procedure.","A function returns a value to the calling code (1). A procedure does not return a value (1). Both are subroutines that group code for reuse (1)."]]
+},
+"Procedures":{
+notes:`<h3>Procedures</h3><p>A named block of code that performs a task but does <b>not return</b> a value.</p>`,
+flash:[["What is a procedure?","A named block of code that performs an action but doesn't return a value."]],
+quiz:[["A procedure…",["Returns a value","Does not return a value","Is always recursive","Is hardware"],1,"No return."]],
+exam:[[2,"State one benefit of using procedures.","Code can be reused without rewriting (1); program is easier to read and maintain (1)."]]
+},
+"Operators":{
+notes:`<h3>Operators</h3><ul><li><b>Arithmetic:</b> + - * / MOD DIV ^</li><li><b>Comparison:</b> == != < > <= >=</li><li><b>Logical:</b> AND OR NOT</li></ul>
+<p><b>MOD</b> = remainder. <b>DIV</b> = integer division.</p>`,
+flash:[["What does MOD return?","The remainder of a division."],
+["What does DIV return?","The integer (whole-number) part of a division."],
+["What are == and != ?","Equal to / not equal to comparison operators."]],
+quiz:[["10 MOD 3 = ?",["3","1","0","30"],1,"Remainder of 10/3 is 1."],
+["10 DIV 3 = ?",["3","1","0","3.33"],0,"Integer part of 10/3 is 3."]],
+exam:[[3,"State the result of: 17 MOD 5, 17 DIV 5, and 4 == 4.","17 MOD 5 = 2 (1). 17 DIV 5 = 3 (1). 4 == 4 = True (1)."]]
+},
+"Defensive programming":{
+notes:`<h3>Defensive programming</h3><p>Writing programs that anticipate misuse, invalid input, or errors and handle them gracefully.</p>
+<p>Includes: input validation, authentication, sensible error messages, commented code, modular design.</p>`,
+flash:[["What is defensive programming?","Writing code that anticipates errors and misuse and handles them safely."]],
+quiz:[["Defensive programming aims to…",["Crash quickly","Prevent unexpected behaviour","Speed up CPU","Use more memory"],1,"Handle errors gracefully."]],
+exam:[[3,"Describe three techniques of defensive programming.","Input validation – check data is reasonable before use (1). Authentication – verify users (1). Error handling – use try/except so program doesn't crash (1)."]]
+},
+"Validation":{
+notes:`<h3>Validation</h3><p>Checking that input data is sensible/within rules <b>before</b> using it.</p>
+<ul><li><b>Range check</b> – within a min/max.</li><li><b>Length check</b> – correct length.</li><li><b>Type check</b> – correct data type.</li><li><b>Presence check</b> – not blank.</li><li><b>Format check</b> – matches a pattern (e.g. email).</li></ul>`,
+flash:[["What is validation?","Checking that data entered is reasonable / follows rules."],
+["Name 3 validation checks.","Range, length, type, presence, format."]],
+quiz:[["Checking an age is between 0–120 is a…",["Length check","Range check","Format check","Type check"],1,"Range."],
+["Validation happens…",["After using the data","Before using the data","Only in the CPU","In ROM"],1,"Check before use."]],
+exam:[[4,"Describe four types of validation.","Range check – within min/max (1). Length check – correct number of characters (1). Presence check – field is not empty (1). Format check – matches a pattern e.g. email (1)."]]
+},
+"Authentication":{
+notes:`<h3>Authentication</h3><p>Verifying a user is who they say they are. Methods: passwords, biometrics, two-factor authentication, security questions.</p>`,
+flash:[["What is authentication?","Verifying the identity of a user."],
+["Give 3 authentication methods.","Passwords, biometrics, 2FA, security questions."]],
+quiz:[["Authentication checks…",["Network speed","User identity","File size","RAM"],1,"Who the user is."]],
+exam:[[3,"Describe three authentication techniques.","Passwords – something the user knows (1). Biometrics – fingerprint/face, something they are (1). 2FA – combines two methods e.g. password + phone code (1)."]]
+},
+"Testing":{
+notes:`<h3>Testing</h3><ul><li><b>Iterative testing</b> – test during development of each module.</li><li><b>Final testing</b> – test the finished program against requirements.</li></ul>
+<h3>Test data</h3><ul><li><b>Normal / Valid</b> – data within accepted range.</li><li><b>Boundary</b> – on the edges.</li><li><b>Invalid</b> – wrong type / out of range.</li><li><b>Erroneous</b> – completely wrong data.</li></ul>`,
+flash:[["What is boundary test data?","Data on the edges of the accepted range (e.g. min and max)."],
+["Difference between iterative and final testing?","Iterative is during development on each part; final is on the complete finished program."]],
+quiz:[["If valid age is 0–120, age = 121 is…",["Valid","Boundary","Invalid","Erroneous"],2,"Just outside the range = invalid."],
+["Testing 0 and 120 (the limits) is…",["Boundary","Erroneous","Normal","Random"],0,"Edge values."]],
+exam:[[4,"Describe four types of test data.","Normal – data within range (1). Boundary – at the edge of the range (1). Invalid – outside range / wrong type (1). Erroneous – completely wrong data, e.g. letters where numbers expected (1)."]]
+},
+"Error handling":{
+notes:`<h3>Error handling</h3><p>Using language features (try / except / catch) to deal with errors at runtime so the program doesn't crash.</p>
+<h3>Types of error</h3><ul><li><b>Syntax</b> – breaks language rules.</li><li><b>Logic</b> – runs but wrong output.</li><li><b>Runtime</b> – occurs during execution (e.g. divide by zero).</li></ul>`,
+flash:[["What is a syntax error?","An error that breaks the rules of the programming language."],
+["What is a logic error?","The program runs but produces the wrong output."]],
+quiz:[["Dividing by zero causes a…",["Syntax error","Runtime error","Logic error","Compile error"],1,"Runtime."]],
+exam:[[3,"Describe three types of programming error.","Syntax – breaks language rules so won't run (1). Logic – runs but produces wrong output (1). Runtime – occurs during execution e.g. divide by zero (1)."]]
+},
+"AND":{
+notes:`<h3>AND gate</h3><p>Output is 1 only if <b>both</b> inputs are 1.</p>
+<table style="border-collapse:collapse;margin-top:8px"><tr><th style="padding:6px 14px;border:1px solid var(--border)">A</th><th style="padding:6px 14px;border:1px solid var(--border)">B</th><th style="padding:6px 14px;border:1px solid var(--border)">A AND B</th></tr>
+<tr><td style="padding:6px 14px;border:1px solid var(--border)">0</td><td style="padding:6px 14px;border:1px solid var(--border)">0</td><td style="padding:6px 14px;border:1px solid var(--border)">0</td></tr>
+<tr><td style="padding:6px 14px;border:1px solid var(--border)">0</td><td style="padding:6px 14px;border:1px solid var(--border)">1</td><td style="padding:6px 14px;border:1px solid var(--border)">0</td></tr>
+<tr><td style="padding:6px 14px;border:1px solid var(--border)">1</td><td style="padding:6px 14px;border:1px solid var(--border)">0</td><td style="padding:6px 14px;border:1px solid var(--border)">0</td></tr>
+<tr><td style="padding:6px 14px;border:1px solid var(--border)">1</td><td style="padding:6px 14px;border:1px solid var(--border)">1</td><td style="padding:6px 14px;border:1px solid var(--border)">1</td></tr></table>`,
+flash:[["When is A AND B = 1?","Only when both A and B are 1."]],
+quiz:[["1 AND 0 = ?",["0","1","2","-1"],0,"AND needs both to be 1."]],
+exam:[[2,"Complete the truth table for A AND B for inputs (0,1) and (1,1).","(0,1) = 0 (1). (1,1) = 1 (1)."]]
+},
+"OR":{
+notes:`<h3>OR gate</h3><p>Output is 1 if <b>either</b> input is 1.</p>`,
+flash:[["When is A OR B = 1?","When at least one input is 1."]],
+quiz:[["0 OR 1 = ?",["0","1","2","-"],1,"OR returns 1 if either is 1."]],
+exam:[[2,"State the output of (1 OR 0) and (0 OR 0).","1 OR 0 = 1 (1). 0 OR 0 = 0 (1)."]]
+},
+"NOT":{
+notes:`<h3>NOT gate</h3><p>Inverts the input: 0 → 1 and 1 → 0.</p>`,
+flash:[["What does NOT do?","Inverts the input – 0 becomes 1 and vice versa."]],
+quiz:[["NOT 1 = ?",["0","1","2","Error"],0,"Inverts to 0."]],
+exam:[[1,"State the output of NOT 0.","1."]]
+},
+"Truth tables":{
+notes:`<h3>Truth tables</h3><p>Shows the output of a logical expression for every possible combination of inputs. With <b>n inputs</b> there are <b>2^n rows</b>.</p>`,
+flash:[["How many rows does a truth table with 3 inputs have?","2^3 = 8."]],
+quiz:[["Truth table for 4 inputs has how many rows?",["8","16","32","4"],1,"2^4 = 16."]],
+exam:[[3,"Draw a truth table for A AND (NOT B).","(A=0,B=0)→0; (A=0,B=1)→0; (A=1,B=0)→1; (A=1,B=1)→0 (3 for any valid table)."]]
+},
+"Logic circuits":{
+notes:`<h3>Logic circuits</h3><p>Combinations of AND, OR and NOT gates that produce a logical output. Used to model conditions in hardware.</p>`,
+flash:[["What three gates does GCSE OCR focus on?","AND, OR, NOT."]],
+quiz:[["A logic circuit is built from…",["Resistors only","Logic gates","RAM","Compilers"],1,"Gates."]],
+exam:[[3,"Write the Boolean expression for: 'Alarm sounds when motion is detected AND the system is armed, OR when the panic button is pressed.'","Alarm = (Motion AND Armed) OR Panic (3)."]]
+},
+"Translators":{
+notes:`<h3>Translators</h3><p>Programs that convert source code into machine code that the CPU can execute.</p>
+<p>Three types: <b>assembler</b> (assembly → machine), <b>compiler</b>, <b>interpreter</b>.</p>`,
+flash:[["What is a translator?","Software that converts code from one language to another – usually source code into machine code."],
+["Name three types of translator.","Assembler, compiler, interpreter."]],
+quiz:[["A translator converts…",["Code to code","Hardware to software","Files to images","Cache to RAM"],0,"Code to executable code."]],
+exam:[[2,"State the three types of translator.","Assembler (1); compiler (1); interpreter (1) – any two for full marks if 2-mark variant."]]
+},
+"Compilers":{
+notes:`<h3>Compiler</h3><p>Translates the <b>whole</b> program into machine code <b>once</b>, producing an executable file. Runs faster, but errors only reported after compilation.</p>`,
+flash:[["How does a compiler work?","Translates the whole program at once into machine code, producing an executable."],
+["Give an advantage of a compiler.","Faster execution; the executable can be distributed without the source code."]],
+quiz:[["A compiler translates…",["One line at a time","The whole program at once","Only comments","Only constants"],1,"All at once."]],
+exam:[[4,"Compare compilers and interpreters.","Compiler translates whole program at once (1) producing an executable that runs quickly (1). Interpreter translates and runs line by line (1) making errors easier to find but execution slower (1)."]]
+},
+"Interpreters":{
+notes:`<h3>Interpreter</h3><p>Translates and runs source code <b>one line at a time</b>. Slower execution but errors are reported as soon as encountered, making debugging easier.</p>`,
+flash:[["How does an interpreter work?","Translates and executes the source code line by line."],
+["Give an advantage of an interpreter.","Errors reported immediately, easier to debug; cross-platform if interpreter is available."]],
+quiz:[["An interpreter runs code…",["All at once","Line by line","On the GPU","After compiling"],1,"Line by line."]],
+exam:[[2,"State one advantage and one disadvantage of an interpreter.","Easier to find errors as they're reported line by line (1). Slower execution than compiled code (1)."]]
+},
+"IDEs":{
+notes:`<h3>IDE</h3><p><b>Integrated Development Environment</b> – software providing tools to help write, run and debug programs.</p>
+<h3>Common IDE features</h3><ul><li>Editor with syntax highlighting & autocomplete</li><li>Run-time environment</li><li>Translator (compiler/interpreter)</li><li>Debugger & breakpoints</li><li>Error diagnostics</li></ul>`,
+flash:[["What does IDE stand for?","Integrated Development Environment."],
+["Name 3 features of an IDE.","Editor, debugger, run-time, translator, error diagnostics, autocomplete."]],
+quiz:[["Which is an IDE feature?",["Defragmenting","Debugger","Encryption of RAM","SSD wear-leveling"],1,"Debugger."]],
+exam:[[4,"State and describe four features of an IDE.","Editor – type and edit code, often with syntax highlighting (1). Translator – compiles or interprets the code (1). Debugger – allows step-through and breakpoints to find errors (1). Error diagnostics – highlights errors with helpful messages (1)."]]
+}
+};
+
+/* Premium OCR J277 note expansions: every specification subtopic receives
+at least five substantial, exam-focused revision points. */
+const NOTE_EXPANSIONS = {
+"CPU":["The CPU (Central Processing Unit) executes program instructions and controls the computer's operations through the fetch–decode–execute cycle.","The arithmetic logic unit (ALU) performs calculations and Boolean comparisons, while the control unit coordinates components using control signals.","Clock speed is measured in hertz and indicates cycles per second; a higher speed can execute more instructions but may increase heat and power use.","Multiple cores can process separate instruction streams simultaneously, although software must support parallel processing to gain the full benefit.","A larger cache stores more frequently used instructions close to the CPU, reducing slower accesses to RAM and improving performance."],
+"Fetch Decode Execute cycle":["During fetch, the address in the program counter is copied to the MAR, then the instruction at that address is transferred from memory to the MDR.","The fetched instruction is copied to the current instruction register, and the program counter is incremented to point to the next instruction.","During decode, the control unit interprets the instruction and identifies the operation and any data or addresses it requires.","During execute, the appropriate component carries out the instruction; for example, the ALU may calculate a value that is stored in the accumulator.","The cycle repeats continuously while a program runs; exam answers should name all three stages and explain what happens rather than merely listing them."],
+"Registers":["Registers are tiny, extremely fast storage locations inside the CPU that hold instructions, addresses, data and intermediate results during processing.","The program counter (PC) stores the address of the next instruction to fetch and is normally incremented after each fetch.","The memory address register (MAR) stores the address in memory currently being read from or written to.","The memory data register (MDR) stores the data or instruction being transferred between memory and the CPU.","The accumulator stores intermediate arithmetic and logic results produced by the ALU; do not confuse it with long-term storage."],
+"Cache":["Cache is small-capacity, high-speed memory located in or close to the CPU and is faster to access than RAM.","It holds copies of frequently or recently used instructions and data because these are likely to be needed again soon.","Finding required data in cache avoids a slower transfer from RAM, so the CPU spends less time waiting and executes instructions faster.","Increasing cache size can improve performance by increasing the chance that required data is present, although cache is expensive.","Cache is volatile primary memory, not permanent secondary storage; its purpose is speed rather than long-term capacity."],
+"Embedded systems":["An embedded system is a computer built into a larger device to perform a specific, dedicated function rather than many general-purpose tasks.","Examples include washing-machine controllers, traffic-light systems and car engine-management units, each responding to inputs to control outputs.","Their software is often firmware stored in non-volatile memory so the device can start reliably whenever it receives power.","They are commonly designed for low cost, low power consumption, small size and dependable real-time operation.","A desktop computer is not normally embedded because users can install many applications; the key distinction is a dedicated role within another product."],
+"RAM":["RAM (Random Access Memory) is volatile primary storage holding programs and data currently being used by the CPU.","Its contents are lost when power is removed, so files must be saved to non-volatile secondary storage for long-term retention.","The operating system, running applications and their active data are loaded from secondary storage into RAM because RAM is much faster.","More RAM allows more or larger programs to remain active without relying as heavily on slower virtual memory.","RAM capacity does not increase CPU clock speed; it improves performance mainly when insufficient memory was causing frequent swapping."],
+"ROM":["ROM (Read-Only Memory) is non-volatile primary memory whose contents remain available when electrical power is removed.","It stores instructions needed to start a device, such as boot firmware that checks hardware and begins loading the operating system.","ROM is suitable for instructions that should not change during normal use, including firmware in many embedded systems.","Unlike RAM, ROM is not used as the working area for programs and data that continually change while software runs.","Exam questions often contrast volatility and purpose: RAM is temporary working memory, whereas ROM retains start-up or fixed instructions."],
+"Virtual memory":["Virtual memory is an area of secondary storage used temporarily when there is insufficient free RAM for all active programs and data.","The operating system moves inactive sections from RAM to secondary storage and restores them when they are needed again.","This enables programs to continue running when physical RAM is full, but it does not provide the same speed as adding more RAM.","Secondary storage has slower access times than RAM, so frequent movement can cause noticeable delays known as disk thrashing.","Virtual memory is not extra physical memory and is not ROM; it is managed space on an HDD or SSD."],
+"Secondary storage":["Secondary storage is non-volatile storage used to retain programs and user data when the computer is switched off.","Common technologies are magnetic hard disks, optical discs and solid-state flash storage, each with different strengths and limitations.","Storage choices are compared using capacity, speed, durability, reliability, portability and cost per unit of storage.","A server backup may prioritise high capacity and low cost, while a mobile device may prioritise low power use, durability and size.","Secondary storage is generally slower than RAM but offers far greater capacity and persistent storage at a lower cost per gigabyte."],
+"Optical storage":["Optical media stores data as physical patterns on a disc that are detected through differences in reflected laser light.","CDs, DVDs and Blu-ray discs use the same principle but have different capacities because of track spacing and laser technology.","Discs are inexpensive to manufacture and distribute, making them useful for music, films or archived material.","They usually have lower capacity and slower access than modern HDDs and SSDs, and scratches can make data unreadable.","Optical storage is non-volatile and removable; it should not be confused with magnetic storage because it uses light rather than magnetisation."],
+"Magnetic storage":["Magnetic storage represents binary data by magnetising areas of a surface in different directions.","A hard disk drive uses rapidly spinning platters and a moving read/write head to locate and change these magnetic regions.","HDDs offer large capacities and low cost per gigabyte, so they are suitable for desktop storage and large backups.","Moving parts make HDDs noisier, slower, more power-hungry and more vulnerable to damage from impact than SSDs.","Magnetic tape provides very high-capacity sequential storage for backups, but locating individual files is slower than direct-access media."],
+"Solid state storage":["Solid-state storage records data electronically in flash-memory cells and contains no moving mechanical parts.","SSDs, USB flash drives and memory cards are common examples, although their shape and intended use differ.","Electronic access gives fast read times, silent operation, low power consumption and strong resistance to knocks.","Solid-state storage usually costs more per gigabyte than magnetic storage and memory cells have a limited number of write cycles.","For laptops, its durability and low power use are important; for large archives, cheaper magnetic storage may be more appropriate."],
+"LAN":["A local area network (LAN) connects devices across a small geographical area such as one building, school or site.","The organisation normally owns and manages the connecting hardware and transmission media used by its LAN.","A LAN allows users to share files, printers, applications and an internet connection, reducing duplication of resources.","Central user accounts and backups can improve management, although network failure or attacks may affect many connected users.","LAN describes geographical scope, not whether connections are wired or wireless; either transmission method can be used."],
+"WAN":["A wide area network (WAN) connects devices or smaller networks over a large geographical area, such as between cities or countries.","WAN links commonly use infrastructure rented from telecommunications companies because one organisation does not own every connection.","The internet is the largest WAN, joining networks worldwide through routers and agreed communication protocols.","A business can use a WAN to connect branch-office LANs and share central services across distant sites.","Compared with a LAN, a WAN commonly has higher latency, greater dependence on third parties and more security considerations."],
+"Network hardware":["A network interface controller (NIC) enables a device to connect to a network and has a unique MAC address used on the local network.","A switch connects devices within a LAN and forwards frames to the correct port using destination MAC addresses.","A router connects different networks and forwards packets toward their destinations using IP addresses.","A wireless access point allows wireless devices to join a network by transmitting and receiving radio signals.","Transmission media include copper cable, fibre-optic cable and radio waves; bandwidth, interference, distance and cost affect the choice."],
+"Protocols":["A protocol is an agreed set of rules defining how devices format, transmit, receive and interpret data.","TCP divides data into packets, checks successful delivery and reorders packets, while IP supplies addressing and routing across networks.","HTTP transfers web-page data and HTTPS adds encryption and authentication for safer communication with websites.","FTP transfers files; SMTP sends email, while IMAP retrieves and synchronises email held on a server.","Protocols allow hardware and software from different manufacturers to communicate consistently; ports distinguish services on one device."],
+"Ethernet":["Ethernet is a family of standards used for wired communication on local area networks.","Devices usually connect through copper cables to a switch, which forwards frames according to MAC addresses.","Wired Ethernet typically offers stable speed, low latency and less interference than wireless connections.","Cable length and physical access restrict mobility, and installing cables across a building can be disruptive or expensive.","Ethernet is a connection technology, not the internet itself; a router links the Ethernet LAN to other networks."],
+"Wireless networks":["Wireless networking uses radio waves to connect devices without physical data cables, commonly through a wireless access point.","It provides mobility and convenient installation, making it suitable for phones, tablets and locations where cabling is impractical.","Signals have limited range and may be weakened by walls or disrupted by interference from other equipment and networks.","Because signals travel through open space, encryption such as WPA2 or WPA3 and a strong password are needed to reduce unauthorised access.","Wireless speed and reliability can vary with distance and congestion; wired Ethernet may be preferable for consistent high performance."],
+"Malware":["Malware is software created to damage systems, disrupt operation, steal data or gain unauthorised access.","Viruses attach to files and spread when executed, worms self-replicate across networks, and Trojans disguise themselves as legitimate software.","Ransomware encrypts files and demands payment, while spyware secretly gathers information such as passwords or browsing activity.","Protection includes anti-malware scanning, timely updates, firewalls, restricted permissions and avoiding untrusted downloads.","A virus is one type of malware, not a synonym for every threat; exam answers should identify the specific behaviour and impact."],
+"Phishing":["Phishing uses deceptive messages or websites to persuade users to reveal confidential information or install malicious software.","Attackers often imitate trusted organisations and create urgency, directing victims to a fake login page through a misleading link.","Warning signs include unexpected requests, unusual sender addresses, spelling errors and URLs that do not match the claimed organisation.","Users should verify requests through a separate trusted channel, avoid suspicious links and report messages to administrators.","Spam filtering and staff training reduce risk, but phishing exploits human trust rather than a purely technical weakness."],
+"Brute force attacks":["A brute-force attack systematically tries many password or encryption-key combinations until the correct one is found.","Long passwords with varied characters create far more combinations and therefore require more time to guess.","Account lockouts, increasing delays and CAPTCHAs restrict automated attempts, although lockouts can also be abused to deny access.","Two-factor authentication adds a separate proof of identity, so a guessed password alone is insufficient.","Brute force is different from phishing: it guesses credentials computationally instead of tricking a user into revealing them."],
+"Encryption":["Encryption transforms readable plaintext into unreadable ciphertext using an algorithm and an encryption key.","Authorised recipients use the correct key to decrypt the ciphertext and recover the original data.","It protects confidentiality when data is stored or transmitted, because intercepted ciphertext should be meaningless without the key.","HTTPS, encrypted messaging and protected wireless networks are real-world uses of encryption.","Encryption does not prevent data being intercepted or deleted; it reduces the value of stolen data and depends on secure key management."],
+"Firewalls":["A firewall monitors incoming and outgoing network traffic and applies rules to allow or block connections.","Rules may examine IP addresses, port numbers, protocols or whether a connection was requested from inside the network.","Firewalls can be software on one device or hardware protecting an entire network at its boundary.","Blocking unnecessary ports and suspicious sources reduces opportunities for unauthorised network access.","A firewall is one layer of defence and cannot replace updates, anti-malware tools or careful users, especially against threats already inside."],
+"User access levels":["Access levels define which files, data and system actions each authenticated user is permitted to use.","The principle of least privilege gives users only the permissions needed for their role, limiting accidental and deliberate damage.","For example, pupils may read shared resources, teachers may edit marks, and administrators may manage accounts and software.","Permissions should be reviewed when responsibilities change and accounts should not be shared between users.","Authentication proves who a user is, whereas authorisation through access levels determines what that identified user may do."],
+"Operating systems":["An operating system manages computer hardware and provides an environment in which applications can run.","Memory management allocates RAM to processes, keeps processes separate and may manage virtual memory when RAM is limited.","Processor management schedules CPU time so several programs can appear to run concurrently through multitasking.","Peripheral management uses device drivers to communicate with hardware, while file management organises stored data into files and directories.","The OS also provides a user interface, accounts, access rights and security; exam answers should explain functions rather than list names only."],
+"Utility software":["Utility software maintains, protects or optimises a computer system rather than carrying out the user's main productive task.","Backup utilities copy data so it can be restored after deletion, damage or hardware failure; a backup must be stored separately.","Compression utilities reduce file size for storage or transmission and later reconstruct the data when required.","Encryption utilities protect confidentiality, while anti-malware utilities scan, quarantine and remove malicious software.","Defragmentation rearranges fragmented HDD files into contiguous blocks for faster access, but it is unnecessary and undesirable for SSDs."],
+"File management":["File management allows users and programs to create, name, copy, move, rename and delete files and folders.","A hierarchical directory structure groups related files and provides paths that identify their locations.","The operating system records metadata such as file type, size, dates and access permissions.","Meaningful names and organised folders make data easier to locate, while permissions prevent unauthorised viewing or modification.","File management is an operating-system service; it does not itself replace backups, which preserve recoverable copies elsewhere."],
+"User interfaces":["A user interface is the method through which a person gives commands to a computer and receives output.","A graphical user interface uses windows, icons, menus and pointers, making common tasks intuitive but consuming more system resources.","A command-line interface accepts typed commands, using few resources and enabling automation but requiring users to learn exact syntax.","Menu-driven interfaces restrict users to listed choices and are suitable for kiosks or cash machines where tasks are predictable.","The best interface depends on the users, hardware and task; exam comparisons should link each feature to a specific context."],
+"Copyright":["Copyright automatically gives creators legal control over copying, adapting and distributing original works including software, images, music and text.","The Copyright, Designs and Patents Act 1988 makes using or distributing protected work without permission or a valid licence unlawful.","Buying software normally purchases a licence to use it under stated conditions, not ownership of its copyright.","Open-source and Creative Commons works still have copyright, but their licences grant specified permissions when conditions are followed.","Possible consequences of infringement include removal of content, financial damages and prosecution; acknowledging a source alone may not grant permission."],
+"Data protection":["The Data Protection Act 2018 controls how organisations collect, process, store and share personal data about identifiable people.","Data must be processed lawfully, fairly and transparently for specified purposes, with no more collected than is necessary.","Records should be accurate, retained only as long as required and protected using appropriate organisational and technical security.","Individuals have rights over their data, including access to information held about them and correction of inaccurate records.","Data protection does not ban organisations from using personal data; it requires responsible, lawful processing and accountability."],
+"Computer misuse":["The Computer Misuse Act 1990 makes intentionally accessing computer material without authorisation an offence.","Unauthorised access with intent to commit or assist another offence is treated as a more serious offence.","Unauthorised acts that impair operation or alter data include deploying malware or deliberately deleting another person's files.","Making, supplying or obtaining tools for use in computer-misuse offences can also be illegal.","Permission is central: security testing can be lawful when explicitly authorised, but curiosity is not a defence for accessing another system."],
+"Environmental impact":["Manufacturing computers consumes energy, water and finite raw materials, while mining can damage habitats and pollute surrounding areas.","Data centres and network infrastructure use substantial electricity and cooling, producing emissions when energy comes from fossil fuels.","Discarded electronic equipment creates e-waste that may contain hazardous substances and valuable materials that should be recovered safely.","Repairing, upgrading, reusing and recycling devices can extend product life and reduce demand for new resources.","Energy-efficient components, power-management settings and renewable electricity reduce impacts, although online services still require physical infrastructure."],
+"Digital divide":["The digital divide is inequality between people or groups in access to digital devices, reliable connectivity and the skills to use them.","Causes include low income, poor rural infrastructure, disability, age, limited education and lack of suitable services.","People without effective access may be disadvantaged in education, employment, communication, banking and government services.","Public internet facilities, affordable devices, accessible design, infrastructure investment and skills training can reduce the divide.","Owning a phone does not necessarily remove the divide if data is unaffordable, connectivity is unreliable or services are inaccessible."],
+"Algorithms":["An algorithm is a finite, ordered sequence of unambiguous steps that solves a problem or completes a task.","Decomposition breaks a complex problem into smaller manageable sub-problems that can be designed, coded and tested separately.","Abstraction removes irrelevant detail so attention is focused on information and processes essential to the solution.","Inputs, processing and expected outputs should be identified before an algorithm is represented using pseudocode or a flowchart.","Algorithms can be compared for correctness and efficiency; tracing with normal, boundary and invalid data helps expose logical errors."],
+"Flowcharts":["A flowchart represents an algorithm visually using standard symbols connected by arrows that show the direction of control flow.","Terminator ovals mark start or end, rectangles show processes, parallelograms show input/output and diamonds show decisions.","Decision branches should be labelled with outcomes such as Yes/No so every possible route is clear.","Loops are created by an arrow returning to an earlier decision or process, not by inventing a separate loop symbol.","Flowcharts help communicate and trace logic before coding, but large algorithms can become less concise than structured pseudocode."],
+"Pseudocode":["Pseudocode expresses an algorithm using structured, language-independent statements that resemble programming code.","It should show sequence, selection and iteration clearly with meaningful identifiers and consistent indentation.","Assignments change stored values, while input and output statements communicate with the user; comparisons form Boolean conditions.","Because pseudocode is not executed, minor syntax varies, but its logic must still be precise and traceable.","In OCR questions, follow the given reference style and dry-run each statement rather than assuming it behaves like one particular language."],
+"Linear search":["Linear search begins at one end of a collection and compares each item with the target in sequence.","It stops successfully when a match is found or unsuccessfully when every item has been checked.","The method works with sorted or unsorted data and is simple to implement.","For a list of n items it may require n comparisons in the worst case, making it inefficient for large collections.","When tracing, record the current index and comparison; do not claim the list must be sorted, which is a binary-search requirement."],
+"Binary search":["Binary search requires data to be sorted before searching can begin.","It compares the target with the middle item and immediately succeeds if the values match.","If the target is smaller, the upper half is discarded; if larger, the lower half is discarded, and the process repeats.","Halving the remaining search area each step makes binary search much more efficient than linear search on large sorted lists.","The cost of sorting must be considered if data changes frequently, and incorrect use on unsorted data can miss an existing target."],
+"Bubble sort":["Bubble sort makes repeated passes through a list, comparing each adjacent pair of values.","A pair is swapped when it is in the wrong order, causing larger values to move toward the end during an ascending sort.","After each complete pass, at least one value is in its final position, so later passes may ignore the sorted end.","The algorithm can stop early when a pass makes no swaps because that proves the list is sorted.","Bubble sort is easy to understand but inefficient for large lists because it performs many comparisons and swaps."],
+"Merge sort":["Merge sort uses divide and conquer by repeatedly splitting a list into smaller halves until single-item lists remain.","Single-item lists are already sorted, so pairs can be merged by repeatedly choosing the smaller front item.","The merging stage continues until one complete sorted list has been reconstructed.","It is efficient and predictable for large data sets, usually requiring fewer comparisons than simple quadratic sorts.","Its disadvantage is the additional memory needed to hold temporary sub-lists during splitting and merging."],
+"Insertion sort":["Insertion sort treats the first item as a sorted section and examines each following item in turn.","The current item is compared backwards with sorted values, which are shifted right until the correct position is found.","The item is inserted into the gap, enlarging the sorted section by one, and the process repeats.","It is simple and can perform well on small or nearly sorted lists because few shifts may be required.","On a reverse-ordered large list it requires many comparisons and shifts, so it is generally less efficient than merge sort."],
+"Variables":["A variable is a named memory location whose stored value can change while a program executes.","A meaningful identifier such as totalScore makes code easier to understand and maintain than a vague name.","Assignment stores or replaces a value, so score = score + 1 reads the old value before writing the new one.","A variable's data type controls what values and operations are valid, such as arithmetic on integers or concatenation on strings.","Variables should be initialised before use; do not confuse assignment with an equality comparison in an algorithm."],
+"Constants":["A constant is a named value that is set once and is not changed while the program executes.","Constants suit fixed values such as tax rates, maximum sizes or mathematical values used in several places.","A descriptive name explains the value's meaning and removes unexplained magic numbers from program statements.","Changing a defined constant in one place updates every use, improving maintainability and reducing inconsistency.","A constant can have any suitable data type; it is defined by being fixed, not by always storing a number."],
+"Data types":["Integer stores whole numbers, while real or float stores numbers with fractional parts.","Boolean stores one of two logical values, True or False, and is commonly used in conditions and flags.","Character stores one symbol, whereas string stores a sequence of characters such as a name or postcode.","The chosen type determines memory representation, valid operations and the range or precision of possible values.","Casting converts a value between compatible types, for example turning numeric text from input into an integer before arithmetic."],
+"Selection":["Selection allows a program to choose which statements execute according to a Boolean condition.","An IF branch runs when its condition is true, while ELSE provides an alternative when it is false.","ELSE IF or nested selection can distinguish several cases, but conditions should be ordered so earlier branches do not hide later ones.","Comparison operators create conditions and Boolean operators combine them, for example age >= 13 AND hasPermission.","Boundary values require careful choice of <, <=, > or >=; tracing values on either side of a boundary catches mistakes."],
+"Iteration":["Iteration repeats a block of instructions and is also called looping.","A count-controlled FOR loop is appropriate when the required number of repetitions is known.","A condition-controlled WHILE loop tests before each repetition and may execute zero times if its condition starts false.","A REPEAT UNTIL loop tests after the body, so the statements execute at least once.","Every condition-controlled loop must make progress toward stopping; otherwise it becomes an infinite loop."],
+"Arrays":["An array stores multiple values of the same data type under one identifier, with each element accessed using an index.","A one-dimensional array represents a list, while a two-dimensional array can represent rows and columns such as a game board.","Most programming languages use zero-based indexing, although exam pseudocode should follow the convention stated in the question.","Loops are commonly used to input, search, total or update every array element efficiently.","Accessing an index outside the defined bounds causes an error; the final index must be derived carefully from the array length."],
+"Functions":["A function is a named, reusable subprogram designed to perform a specific task and return a value to its caller.","Parameters receive input values, while arguments are the actual values supplied when the function is called.","The returned result can be assigned to a variable or used directly inside a larger expression.","Functions support decomposition, reduce duplicated code and can be tested independently from the rest of a program.","A function may also contain local variables that exist only during the call; its key distinction from a procedure is returning a value."],
+"Procedures":["A procedure is a named, reusable subprogram that performs a task without returning a value directly.","It may accept parameters so the same instructions can work with different input values.","Procedures are called as statements, for example displayMenu(), and may produce output or alter data available to them.","Using procedures supports decomposition, improves readability and avoids repeating identical blocks of code.","Do not say procedures cannot receive data; they can use parameters, but unlike functions they do not return a result."],
+"Operators":["Arithmetic operators perform calculations, including addition, subtraction, multiplication, division, integer division and modulo.","Relational operators such as ==, !=, < and >= compare values and produce a Boolean result.","Boolean operators AND, OR and NOT combine or invert conditions to build more complex decisions.","The modulo operator returns the remainder after integer division and can test whether a number is even using number MOD 2 = 0.","Operator precedence controls evaluation order, so brackets should be used when the intended order could be unclear."],
+"Defensive programming":["Defensive programming anticipates invalid input and unexpected situations so software continues safely or reports a useful error.","Input validation rejects unsuitable values before they are processed, reducing crashes and incorrect stored data.","Authentication and access controls prevent unauthorised users from reaching protected features or information.","Clear prompts, sensible defaults and confirmation before destructive actions reduce mistakes caused by users.","Maintainable code uses meaningful names, indentation, comments and modular subprograms so faults are easier to locate and correct."],
+"Validation":["Validation automatically checks whether input is sensible and follows rules before a program accepts it.","Range checks enforce upper and lower limits, while type checks require a value of the expected data type.","Length checks enforce a permitted number of characters, presence checks reject empty input and format checks require a pattern.","Check digits can detect some data-entry errors in codes, while lookup checks compare input with a list of allowed values.","Validation cannot prove information is true; verification, such as double entry, checks that data was copied accurately."],
+"Authentication":["Authentication is the process of checking that a user is genuinely the person or account they claim to be.","Knowledge factors include passwords, possession factors include security tokens, and biometric factors include fingerprints.","Multi-factor authentication combines different factor types, so compromising one credential is not enough for access.","Passwords should be stored as salted hashes rather than readable plaintext, limiting exposure if a database is stolen.","Authentication identifies the user, while authorisation applies permissions afterward; these terms should not be used interchangeably."],
+"Testing":["Testing executes a program with planned data to find faults and check that requirements are satisfied.","Normal test data is valid and typical, boundary data lies at or immediately around allowed limits, and invalid data should be rejected.","A test plan records each test input, its reason, expected result and actual result so failures can be reproduced.","Iterative testing occurs throughout development, while final or acceptance testing checks the completed solution against requirements.","Successful tests show correct behaviour for those cases, not proof that no errors exist; failed cases should be fixed and retested."],
+"Error handling":["Error handling detects exceptional situations and responds safely instead of allowing a program to terminate unexpectedly.","Examples include non-numeric input, division by zero, unavailable files or failed network connections.","A program can display a clear message, request new input, record the problem or return to a safe state.","Exception-handling structures separate normal processing from recovery code and prevent one predictable problem from crashing the application.","Error handling does not replace validation or testing; these techniques work together to create robust software."],
+"AND":["AND is a Boolean operator whose output is true only when both of its inputs are true.","If either input is false, the entire AND expression is false.","AND is used when every condition must be satisfied, such as age >= 18 AND hasTicket.","Its truth-table outputs for 00, 01, 10 and 11 are 0, 0, 0 and 1 respectively.","A common mistake is treating AND like OR; translate it as ‘both conditions’ before evaluating."],
+"OR":["OR is a Boolean operator whose output is true when at least one input is true.","It is false only when both inputs are false.","OR is used when either condition is sufficient, such as isAdmin OR isOwner.","Its truth-table outputs for 00, 01, 10 and 11 are 0, 1, 1 and 1 respectively.","OCR uses inclusive OR, so the output remains true when both inputs are true."],
+"NOT":["NOT is a unary Boolean operator, meaning it acts on one input rather than combining two inputs.","It inverts the input: NOT true is false and NOT false is true.","NOT can express an opposite condition, such as NOT loggedIn, or invert the output of another gate.","Its truth table contains only two rows: input 0 gives output 1, and input 1 gives output 0.","In a logic diagram, a small circle commonly indicates inversion; follow brackets carefully in compound expressions."],
+"Truth tables":["A truth table lists every possible combination of Boolean inputs and the corresponding output of an expression or circuit.","With n independent inputs there are 2^n rows, so two inputs require four rows and three inputs require eight.","Intermediate columns should be calculated for each gate or bracketed part before working out the final output.","Rows are normally ordered systematically in binary sequence so no input combination is omitted or duplicated.","Truth tables can prove whether two expressions are equivalent by showing identical final outputs for every possible input."],
+"Logic circuits":["Logic circuits represent Boolean expressions using connected gate symbols whose signals are either 0 or 1.","AND gates require all inputs to be 1, OR gates require at least one, and NOT gates invert one signal.","The output of one gate can become the input of another, so complex circuits should be evaluated in stages from left to right.","A circuit can be converted to a Boolean expression or truth table, and an expression can be implemented as a circuit.","Brackets and connection order matter: NOT(A AND B) is different from (NOT A) AND B."],
+"Translators":["A translator converts source code written by a programmer into machine code that a processor can execute.","High-level language must be translated because CPUs directly understand only binary machine instructions.","Compilers translate an entire program before execution, while interpreters translate and execute it one statement at a time.","Assemblers translate low-level assembly-language mnemonics into machine code, usually with a close one-to-one relationship.","Translator choice affects execution speed, error reporting, portability and whether source code must be supplied to users."],
+"Compilers":["A compiler translates the whole source program into machine code before the resulting program is executed.","It reports errors after compilation and no executable is produced successfully until syntax errors are corrected.","The generated executable can run repeatedly without translating the source again, so execution is generally fast.","The executable is produced for a particular processor or platform and can be distributed without exposing the original source code.","Compilation may take time during development, so interpreters can provide quicker feedback while code is being written."],
+"Interpreters":["An interpreter translates and executes source code one statement at a time while the program runs.","It normally stops when it reaches an error, making the location easy to identify and supporting rapid testing.","No separate machine-code executable is produced, so the interpreter and usually the source code are needed each time.","Repeated translation makes interpreted programs generally slower to execute than compiled equivalents.","Interpreters are useful during development and for portable scripts, but distribution exposes source more readily."],
+"IDEs":["An integrated development environment (IDE) combines tools for writing, translating, running and debugging programs in one application.","A code editor provides features such as syntax highlighting, automatic indentation and autocomplete to reduce mistakes and improve readability.","Error diagnostics identify likely syntax problems, while run-time tools execute or translate the program.","A debugger supports breakpoints, single-step execution and variable watches so programmers can inspect changing program state.","Editors do not guarantee correct logic; programmers still need planned testing, suitable test data and careful interpretation of errors."]
+};
+
+Object.entries(NOTE_EXPANSIONS).forEach(([topic, points]) => {
+if (!CONTENT[topic]) return;
+CONTENT[topic].notes += `<h3>Complete Revision Points</h3><ul>${points.map(point => `<li>${point}</li>`).join("")}</ul><div class="tip">💡 Exam tip: Use precise terminology, apply it to the scenario, and explain the effect rather than giving an unsupported statement.</div><div class="danger">⚠ Common misconception: Similar terms are not interchangeable; define the named concept before comparing it with another.</div>`;
+});
+
+/* Default fallback content for any subtopic without custom entries */
+function defaultContent(name){
+return {
+notes:`<h3>${name}</h3><p>Key OCR J277 topic. Make sure you can: define the term, give examples, and link it back to how computers work.</p>
+<div class="tip">Use the flashcards and quiz below to reinforce the basics for ${name}.</div>`,
+flash:[[`Define ${name}.`,`Write a clear, one-line GCSE definition of ${name}.`],
+[`Give an example of ${name}.`,`A concrete real-world example helps lock this concept in.`]],
+quiz:[[`Which best describes ${name}?`,["The correct concept","Unrelated concept","Random distractor","Another distractor"],0,`Revise the notes for ${name}.`]],
+exam:[[2,`Define ${name}.`,`A clear one-sentence definition with example (2).`]]
+};
+}
+function contentFor(name){ return CONTENT[name] || defaultContent(name); }
+
+/* GLOSSARY */
+const GLOSSARY = [
+["Abstraction","Removing unnecessary detail from a problem."],
+["Algorithm","Step-by-step set of instructions for solving a problem."],
+["ALU","Arithmetic Logic Unit – performs arithmetic and logical operations in the CPU."],
+["Array","Data structure storing multiple values of the same type under one name."],
+["Authentication","Verifying that a user is who they say they are."],
+["Binary","Number system using only 0 and 1."],
+["Binary search","Search algorithm that halves a sorted list each step."],
+["Boolean","Data type with values True or False."],
+["Bubble sort","Sorting algorithm that swaps adjacent items."],
+["Cache","Small fast memory in/near the CPU storing frequently used data."],
+["CPU","Central Processing Unit – processes instructions."],
+["Compiler","Translator that converts the whole program to machine code at once."],
+["Constant","A named value that cannot change while the program runs."],
+["Cyber attack","An attempt to gain unauthorised access or damage a system."],
+["Decomposition","Breaking a problem into smaller parts."],
+["Defragmentation","Reorganising files on disk so they are contiguous."],
+["Embedded system","A computer built into a device for a specific task."],
+["Encryption","Scrambling data with a key so only authorised users can read it."],
+["Ethernet","Wired LAN networking standard (IEEE 802.3)."],
+["Firewall","Hardware/software that filters network traffic."],
+["Flowchart","Diagram representing an algorithm with shaped boxes."],
+["FTP","File Transfer Protocol."],
+["Function","Subroutine that returns a value."],
+["GUI","Graphical User Interface."],
+["HDD","Hard Disk Drive – magnetic secondary storage."],
+["HTTP","HyperText Transfer Protocol."],
+["HTTPS","Secure (encrypted) HTTP."],
+["IDE","Integrated Development Environment."],
+["IMAP","Email protocol that keeps mail on the server."],
+["Interpreter","Translator that runs code line by line."],
+["Iteration","Repeating a block of code (a loop)."],
+["LAN","Local Area Network – small geographic area."],
+["Logic gate","Hardware that performs a Boolean operation."],
+["MAC address","Unique hardware identifier for a network adapter."],
+["Malware","Malicious software."],
+["Memory","Storage used by a computer – RAM, ROM, cache, etc."],
+["NIC","Network Interface Card."],
+["Operating system","Software that manages hardware and runs applications."],
+["Packet","A small unit of data sent across a network."],
+["Phishing","Tricking users into giving up personal data via fake messages."],
+["POP3","Email protocol that downloads then removes mail from the server."],
+["Procedure","Subroutine that does not return a value."],
+["Protocol","A set of rules for communication."],
+["Pseudocode","Informal English-like way of writing algorithms."],
+["RAM","Random Access Memory – volatile main memory."],
+["ROM","Read-Only Memory – non-volatile, stores bootloader."],
+["Router","Hardware that routes packets between networks."],
+["Selection","Conditional execution (if/else)."],
+["Server","Computer providing a service to other computers."],
+["SMTP","Simple Mail Transfer Protocol – sends email."],
+["SSD","Solid State Drive – flash secondary storage."],
+["Subroutine","Named, reusable block of code (function or procedure)."],
+["Switch","Network hardware that connects devices on a LAN."],
+["TCP/IP","Core suite of internet protocols."],
+["Truth table","Table showing outputs of a Boolean expression for all inputs."],
+["Utility software","Maintenance software e.g. defragmenter, antivirus."],
+["Validation","Checking input data is reasonable before use."],
+["Variable","Named storage whose value can change."],
+["Virtual memory","Disk space used as extra RAM when RAM is full."],
+["Virus","Malware that attaches to files and spreads when run."],
+["WAN","Wide Area Network – large geographic area, e.g. the Internet."],
+["Wi-Fi","Wireless networking using radio waves (IEEE 802.11)."],
+["WPA2","Wireless network encryption standard."]
+];
+
+/* ACHIEVEMENTS */
+const ACHIEVEMENTS = [
+["first_quiz","🏅","First Steps","Complete your first quiz"],
+["xp_100","✨","Spark","Earn 100 XP"],
+["xp_500","⚡","Charged","Earn 500 XP"],
+["xp_1000","🚀","Launched","Earn 1000 XP"],
+["streak_3","🔥","On Fire","3-day streak"],
+["streak_7","💎","Diamond Streak","7-day streak"],
+["topic_5","📘","Bookworm","Complete 5 subtopics"],
+["topic_all","👑","J277 Master","Complete every subtopic"],
+["streak_14","🌠","Unstoppable","14-day revision streak"],
+["quiz_10","🧠","Quiz Architect","Attempt quizzes in 10 subtopics"],
+["perfect_5","🎯","Precision Coder","Earn five perfect quiz scores"],
+["challenge_3","⚔","Challenge Runner","Finish three mixed challenges"],
+["daily_7","☀","Daily Discipline","Complete seven daily challenges"],
+["sprint_100","⏱","Sprint Century","Score 100 points in Exam Sprints"]
+];
+
+/* ============================================================
+STATE
+============================================================ */
+const DEFAULT_STATE = {
+xp:0, streak:0, lastVisit:null, theme:"dark",
+completed:{}, // subtopic -> true
+scores:{}, // subtopic -> {best, attempts}
+achievements:{}, activity:{}, challenges:0, dailyChallenges:{}, sprintScore:0
+};
+let STATE = loadState();
+
+function loadState(){
+try{
+const s = JSON.parse(localStorage.getItem("revisepro_state")||"null");
+return Object.assign({},DEFAULT_STATE,s||{});
+}catch{return {...DEFAULT_STATE};}
+}
+function save(){ localStorage.setItem("revisepro_state",JSON.stringify(STATE)); refreshChips(); }
+
+function level(){
+if(STATE.xp>=1500) return "Master";
+if(STATE.xp>=750) return "Advanced";
+if(STATE.xp>=250) return "Intermediate";
+return "Beginner";
+}
+function nextLevelXP(){
+if(STATE.xp<250) return 250;
+if(STATE.xp<750) return 750;
+if(STATE.xp<1500) return 1500;
+return STATE.xp;
+}
+
+function refreshChips(){
+document.getElementById("xpChip").textContent = STATE.xp;
+document.getElementById("streakChip").textContent = STATE.streak;
+document.getElementById("levelChip").textContent = level();
+}
+function toast(msg){
+const t = document.createElement("div"); t.className="toast"; t.textContent = msg;
+document.body.appendChild(t); setTimeout(()=>t.remove(),2200);
+}
+function addXP(n,reason){ STATE.xp += n; save(); toast(`+${n} XP — ${reason}`); checkAchievements(); }
+function markCompleted(sub){ if(!STATE.completed[sub]){ STATE.completed[sub]=true; addXP(50,`Completed ${sub}`); } save(); checkAchievements(); }
+function recordActivity(sub, amount=1){
+const day=new Date().toISOString().slice(0,10); STATE.activity[day]=STATE.activity[day]||{};
+STATE.activity[day][sub]=(STATE.activity[day][sub]||0)+amount; save();
+}
+function checkAchievements(){
+const totalSubs = Object.values(SPEC).flatMap(p=>Object.values(p)).flat().length;
+const completed = Object.keys(STATE.completed).length;
+const unlock = (id,name)=>{ if(!STATE.achievements[id]){ STATE.achievements[id]=true; toast(`🏆 Achievement: ${name}`); save(); } };
+if(Object.keys(STATE.scores).length>0) unlock("first_quiz","First Steps");
+if(STATE.xp>=100) unlock("xp_100","Spark");
+if(STATE.xp>=500) unlock("xp_500","Charged");
+if(STATE.xp>=1000) unlock("xp_1000","Launched");
+if(STATE.streak>=3) unlock("streak_3","On Fire");
+if(STATE.streak>=7) unlock("streak_7","Diamond Streak");
+if(STATE.streak>=14) unlock("streak_14","Unstoppable");
+if(completed>=5) unlock("topic_5","Bookworm");
+if(completed>=totalSubs) unlock("topic_all","J277 Master");
+if(Object.keys(STATE.scores).length>=10) unlock("quiz_10","Quiz Architect");
+if(Object.values(STATE.scores).filter(s=>s.best===s.total).length>=5) unlock("perfect_5","Precision Coder");
+if(STATE.challenges>=3) unlock("challenge_3","Challenge Runner");
+if(Object.keys(STATE.dailyChallenges).length>=7) unlock("daily_7","Daily Discipline");
+if(STATE.sprintScore>=100) unlock("sprint_100","Sprint Century");
+}
+
+/* Streak handling */
+(function streak(){
+const today = new Date().toDateString();
+if(STATE.lastVisit !== today){
+const y = new Date(); y.setDate(y.getDate()-1);
+STATE.streak = (STATE.lastVisit === y.toDateString()) ? STATE.streak+1 : 1;
+STATE.lastVisit = today; save();
+}
+})();
+
+/* Theme */
+function applyTheme(){
+document.documentElement.classList.toggle("light", STATE.theme==="light");
+}
+applyTheme();
+
+/* ============================================================
+ROUTING
+============================================================ */
+const VIEWS = {};
+function setActive(view){
+document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
+document.getElementById("sidebar").classList.remove("open");
+}
+function render(view, ...args){
+setActive(view);
+const el = document.getElementById("view"); el.innerHTML="";
+(VIEWS[view]||VIEWS.dashboard)(el,...args);
+window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll(".nav-btn").forEach(b=>b.addEventListener("click",()=>render(b.dataset.view)));
+document.getElementById("menuToggle").addEventListener("click",()=>document.getElementById("sidebar").classList.toggle("open"));
+document.getElementById("themeToggle").addEventListener("click",()=>{STATE.theme = STATE.theme==="light"?"dark":"light"; save(); applyTheme();});
+
+function setTitle(t,s){ document.getElementById("pageTitle").firstChild.nodeValue=t; document.getElementById("pageSub").textContent=s||""; }
+
+/* ============================================================
+ENHANCED CONTENT, GLOBAL SEARCH & LEARNING INTELLIGENCE
+============================================================ */
+const ALL_SUBS=Object.values(SPEC).flatMap(p=>Object.values(p)).flat();
+const TOPIC_FOR={}; Object.values(SPEC).forEach(topics=>Object.entries(topics).forEach(([topic,subs])=>subs.forEach(sub=>TOPIC_FOR[sub]=topic)));
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const strip=s=>{const d=document.createElement("div");d.innerHTML=s||"";return d.textContent||""};
+const random=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>[...a].sort(()=>Math.random()-.5);
+const ELI5={
+"CPU":"The CPU is the computer’s team leader: it reads one instruction, works out what it means, does it, then repeats very quickly.","RAM":"RAM is a temporary desk where the computer keeps things it is using now; the desk is cleared when power goes off.","ROM":"ROM is a permanent instruction card that tells the computer how to begin when it is switched on.","Cache":"Cache is a tiny tray beside the CPU holding things it will probably need next, so it does not walk to the larger RAM desk.","Virtual memory":"When the RAM desk is full, the computer temporarily uses slower storage as overflow space.","LAN":"A LAN connects nearby computers, like all the devices inside one school.","WAN":"A WAN joins networks over long distances; the Internet is the largest example.","Encryption":"Encryption locks readable data into scrambled data, and the correct key unlocks it.","Algorithms":"An algorithm is a precise recipe: ordered steps that solve a problem.","Binary search":"Binary search is like finding a word by opening a sorted dictionary near the middle and discarding the half where it cannot be.","Linear search":"Linear search checks items one after another until it finds the target or reaches the end.","Compiler":"A compiler translates the entire program before it runs, like translating a whole book first.","Interpreter":"An interpreter translates and runs one instruction at a time, like a live translator.","Authentication":"Authentication asks you to prove you are really you before letting you in."
+};
+function simpleExplanation(sub){return ELI5[sub]||`${sub} is a J277 idea about ${TOPIC_FOR[sub]||"computer science"}. Think of it as one part of a larger computer system: learn what it does, what information it receives, what it produces, and why that matters in a real situation.`}
+const COMPARISONS={
+"RAM": [["Feature","RAM","ROM"],["Purpose","Programs and data currently in use","Start-up instructions / firmware"],["Power removed","Contents lost (volatile)","Contents retained (non-volatile)"],["Typical access","Read and write","Normally read-only"]],
+"ROM": [["Feature","RAM","ROM"],["Volatility","Volatile","Non-volatile"],["Use","Working memory","Boot instructions"],["Can change?","Regularly","Not during normal use"]],
+"Secondary storage":[["Feature","HDD","SSD"],["Technology","Magnetic spinning platters","Electronic flash cells"],["Speed","Slower","Faster"],["Durability","Moving parts can be damaged","No moving parts"],["Cost per GB","Usually lower","Usually higher"]],
+"Optical storage":[["Feature","Magnetic","Optical","Solid state"],["Method","Magnetised platter","Laser reads pits/lands","Electronic flash cells"],["Capacity","High","Low–medium","Medium–high"],["Speed","Medium","Slow","Fast"],["Best fit","Large low-cost storage","Media distribution","Portable/mobile devices"]],
+"Magnetic storage":[["Feature","Magnetic","Optical","Solid state"],["Moving parts","Yes","Disc drive","No"],["Cost","Low per GB","Low per disc","Higher per GB"],["Durability","Sensitive to shock","Can scratch","Most shock resistant"]],
+"Solid state storage":[["Feature","HDD","SSD"],["Read/write speed","Lower","Higher"],["Noise/power","More","Silent / lower"],["Capacity for price","Higher","Lower"]],
+"LAN":[["Feature","LAN","WAN"],["Area","Small site/building","Large geographical area"],["Infrastructure","Usually privately owned","Often leased from telecom providers"],["Performance","Usually faster/lower latency","Often slower/higher latency"]],
+"WAN":[["Feature","LAN","WAN"],["Scale","Local","National/international"],["Ownership","Organisation","Third-party links"],["Example","School network","Internet"]],
+"Compilers":[["Feature","Compiler","Interpreter"],["Translation","Whole program at once","One statement at a time"],["Output","Executable file","No separate executable"],["Execution","Usually faster","Usually slower"],["Errors","Reported after compilation","Reported when line is reached"]],
+"Interpreters":[["Feature","Compiler","Interpreter"],["When translated","Before running","During running"],["Distribution","Executable can hide source","Source and interpreter required"],["Debugging","Compilation feedback","Immediate line-by-line feedback"]],
+"Linear search":[["Feature","Linear search","Binary search"],["Data order","Any order","Must be sorted"],["Method","Checks each item","Repeatedly halves search area"],["Large lists","Less efficient","More efficient"]],
+"Binary search":[["Feature","Linear search","Binary search"],["Precondition","None","Sorted data"],["Worst approach","Every item","Repeated halving"],["Best use","Small/unsorted list","Large/sorted list"]],
+"Bubble sort":[["Feature","Bubble","Insertion","Merge"],["Method","Swap adjacent pairs","Insert into sorted section","Split then merge"],["Strength","Simple / early stop","Good on nearly sorted data","Efficient on large lists"],["Weakness","Many comparisons","Slow on reverse order","Needs extra memory"]],
+"Malware":[["Type","How it works","Typical harm"],["Virus","Attaches to files and needs execution","Corrupts or changes files"],["Worm","Self-replicates across networks","Consumes resources/spreads payload"],["Trojan","Pretends to be legitimate","Creates unauthorised access"],["Spyware","Secretly monitors activity","Steals personal data"],["Ransomware","Encrypts files","Demands payment"]],
+"Authentication":[["Method","Factor","Strength / limitation"],["Password","Something known","Cheap, but can be guessed or stolen"],["Token/phone","Something possessed","Stronger, but device can be lost"],["Biometric","Something inherent","Convenient, but cannot be replaced easily"],["MFA","Two different factors","Much harder to compromise"]]
+};
+function tableHTML(rows){return `<div class="compare-wrap"><table class="compare">${rows.map((r,i)=>`<tr>${r.map(c=>`<${i?'td':'th'}>${esc(c)}</${i?'td':'th'}>`).join("")}</tr>`).join("")}</table></div>`}
+function enhancedNotes(sub,c){
+const pts=NOTE_EXPANSIONS[sub]||[]; const real=`A useful real-world example is to identify where ${sub.toLowerCase()} appears in a school, home, business or software system, then explain its input, process and output.`;
+return `<details class="accordion" open><summary>Core Revision Notes</summary><div class="accordion-body notes">${c.notes}</div></details>
+<details class="accordion"><summary>Detailed Explanation</summary><div class="accordion-body"><ul>${pts.map(p=>`<li>${p}</li>`).join("")}</ul></div></details>
+<details class="accordion"><summary>Real World Examples</summary><div class="accordion-body"><p>${real}</p><p>${simpleExplanation(sub)}</p></div></details>
+<details class="accordion"><summary>Exam Tips</summary><div class="accordion-body"><p>Define <b>${esc(sub)}</b> precisely, apply it to the scenario, and connect cause to effect. For “compare”, mention both sides in each point; for “explain”, use because/therefore.</p></div></details>
+<details class="accordion"><summary>Common Mistakes</summary><div class="accordion-body"><p>Do not give a feature without its consequence, confuse related terminology, or repeat the question. Check units, command words and the number of marks.</p></div></details>
+<details class="accordion"><summary>Explain Like I’m 5</summary><div class="accordion-body"><p>${simpleExplanation(sub)}</p></div></details>${COMPARISONS[sub]?`<details class="accordion"><summary>Comparison Table</summary><div class="accordion-body">${tableHTML(COMPARISONS[sub])}</div></details>`:""}`;
+}
+function ensureExamSet(sub,c){
+const seed=c.exam?.[0]||[2,`Define ${sub}.`,`Award one mark for an accurate definition and one for a relevant example.`];
+const extras=[
+[2,`State two facts about ${sub}.`,`1 mark for each accurate, distinct fact linked to ${sub}.`],
+[3,`Explain how ${sub} is used in a computer system or program.`,`Award up to 3 marks for a clear process, correct terminology and a linked effect.`],
+[4,`A school is reviewing its use of ${sub}. Explain two relevant benefits or limitations.`,`Award 1 mark for each valid point and 1 for each developed explanation applied to the school.`],
+[6,`Discuss the importance of ${sub} in a modern computer system.`,`Level response: accurate knowledge, balanced developed points, application to a realistic context and a justified conclusion. Up to 6 marks.`]
+];
+const out=[seed]; for(const q of extras){if(out.length>=5)break;if(!out.some(x=>x[1]===q[1]))out.push(q)} return out;
+}
+ALL_SUBS.forEach(sub=>{const c=contentFor(sub);c.exam=ensureExamSet(sub,c)});
+
+function buildSearchIndex(){
+const items=[];
+Object.values(SPEC).forEach(topics=>Object.entries(topics).forEach(([topic,subs])=>{items.push({type:"topic",title:topic,text:subs.join(" "),view:"topic",arg:topic});subs.forEach(sub=>{const c=contentFor(sub);items.push({type:"subtopic",title:sub,text:strip(c.notes),view:"subtopic",arg:sub,tab:"notes"});c.flash.forEach(([q,a])=>items.push({type:"flashcard",title:q,text:a,view:"subtopic",arg:sub,tab:"flash"}));c.quiz.forEach(([q,opts,,e])=>items.push({type:"quiz",title:q,text:`${opts.join(" ")} ${e||""}`,view:"subtopic",arg:sub,tab:"quiz"}));c.exam.forEach(([,q,a])=>items.push({type:"exam",title:q,text:a,view:"subtopic",arg:sub,tab:"exam"}))})}));
+GLOSSARY.forEach(([n,d])=>items.push({type:"glossary",title:n,text:d,view:"glossary",arg:n})); return items;
+}
+const SEARCH_INDEX=buildSearchIndex();
+function setupGlobalSearch(){
+const input=document.getElementById("globalSearchInput"),box=document.getElementById("searchResults");
+const draw=()=>{const q=input.value.trim().toLowerCase();if(!q){box.classList.remove("open");box.innerHTML="";return}const words=q.split(/\s+/);const hits=SEARCH_INDEX.map(x=>({...x,score:(x.title.toLowerCase().includes(q)?10:0)+words.filter(w=>(x.title+" "+x.text).toLowerCase().includes(w)).length})).filter(x=>x.score).sort((a,b)=>b.score-a.score).slice(0,12);box.innerHTML=hits.map((x,i)=>`<div class="search-result" data-i="${i}"><span class="result-type">${x.type}</span><b>${esc(x.title)}</b><small>${esc(x.text).slice(0,130)}</small></div>`).join("")||`<div class="search-result"><b>No matching revision content</b></div>`;box.classList.add("open");box.querySelectorAll("[data-i]").forEach(n=>n.onclick=()=>{const x=hits[+n.dataset.i];input.value="";box.classList.remove("open");render(x.view,x.arg,x.tab)});};
+input.addEventListener("input",draw);input.addEventListener("keydown",e=>{if(e.key==="Escape"){input.value="";draw()}});document.addEventListener("click",e=>{if(!document.getElementById("globalSearch").contains(e.target))box.classList.remove("open")});
+}
+
+/* ============================================================
+VIEWS
+============================================================ */
+VIEWS.dashboard = (el)=>{
+setTitle("Dashboard","Welcome back, keep your streak alive!");
+const allSubs = Object.values(SPEC).flatMap(p=>Object.values(p)).flat();
+const totalSubs = allSubs.length;
+const done = Object.keys(STATE.completed).length;
+const pct = Math.round(done/totalSubs*100);
+const nextXP = nextLevelXP();
+const lvlPct = Math.min(100,Math.round(STATE.xp/nextXP*100));
+
+el.innerHTML = `
+<div class="grid cols-4">
+<div class="card stat">
+<div class="label">Total XP</div>
+<div class="value">${STATE.xp}</div>
+<div class="sub">Level: ${level()} · Next at ${nextXP} XP</div>
+<div class="progress"><div class="bar" style="width:${lvlPct}%"></div></div>
+</div>
+<div class="card stat">
+<div class="label">Topics Completed</div>
+<div class="value">${done}/${totalSubs}</div>
+<div class="sub">${pct}% of J277 specification</div>
+<div class="progress"><div class="bar" style="width:${pct}%"></div></div>
+</div>
+<div class="card stat">
+<div class="label">Current Streak</div>
+<div class="value">${STATE.streak} 🔥</div>
+<div class="sub">${STATE.streak>=3?"Keep going!":"Visit daily to grow your streak"}</div>
+</div>
+<div class="card stat" style="text-align:center">
+<div class="ring">
+<svg width="120" height="120" viewBox="0 0 120 120">
+<circle cx="60" cy="60" r="50" stroke="rgba(120,120,255,.15)" stroke-width="10" fill="none"/>
+<circle cx="60" cy="60" r="50" stroke="url(#g)" stroke-width="10" fill="none" stroke-linecap="round"
+stroke-dasharray="${2*Math.PI*50}" stroke-dashoffset="${2*Math.PI*50*(1-pct/100)}"/>
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00f0ff"/><stop offset="1" stop-color="#ff2bd6"/></linearGradient></defs>
+</svg>
+<div class="lbl"><b>${pct}%</b><span>Mastery</span></div>
+</div>
+</div>
+</div>
+
+<div style="height:18px"></div>
+<div class="grid cols-2">
+<div class="card">
+<h2 style="margin:0 0 12px">Continue revising</h2>
+<div id="continueList"></div>
+</div>
+<div class="card">
+<h2 style="margin:0 0 12px">Quick actions</h2>
+<div style="display:flex;flex-wrap:wrap;gap:10px">
+<button class="btn" onclick="render('topics')">▣ Browse Topics</button>
+<button class="btn ghost" onclick="render('flashcards')">▤ Flashcards</button>
+<button class="btn ghost" onclick="render('quizzes')">◈ Take a Quiz</button>
+<button class="btn ghost" onclick="render('exam')">✎ Exam Practice</button>
+</div>
+<h3 style="margin-top:20px">Recent achievements</h3>
+<div class="grid cols-2" id="achList"></div>
+</div>
+</div>
+`;
+
+// continue list — first 5 incomplete subs
+const incomplete = allSubs.filter(s=>!STATE.completed[s]).slice(0,5);
+document.getElementById("continueList").innerHTML = (incomplete.length?incomplete:allSubs.slice(0,5)).map(s=>`
+<div class="sub-item ${STATE.completed[s]?'done':''}" onclick="render('subtopic','${s.replace(/'/g,"\\'")}')">
+<span>${s}</span><span class="check">✓</span>
+</div>`).join("");
+
+// achievements preview
+document.getElementById("achList").innerHTML = ACHIEVEMENTS.slice(0,4).map(([id,em,nm,ds])=>`
+<div class="ach ${STATE.achievements[id]?'unlocked':''}"><div class="em">${em}</div><div class="nm">${nm}</div><div class="ds">${ds}</div></div>`).join("");
+};
+
+VIEWS.topics = (el)=>{
+setTitle("OCR J277 Topics","Follow the official specification");
+el.innerHTML = Object.entries(SPEC).map(([paper,topics])=>`
+<div class="card" style="margin-bottom:18px">
+<h2 style="margin:0 0 4px">${paper}</h2>
+<div style="color:var(--muted);font-size:13px;margin-bottom:14px">${Object.keys(topics).length} topics</div>
+<div class="grid cols-3">
+${Object.entries(topics).map(([topic,subs])=>{
+const doneCount = subs.filter(s=>STATE.completed[s]).length;
+return `<div class="card topic-card" onclick="render('topic','${topic.replace(/'/g,"\\'")}')">
+<div class="meta">${doneCount}/${subs.length} complete</div>
+<h3><span class="medal">${doneCount===subs.length?'🥇':doneCount>=Math.ceil(subs.length*.6)?'🥈':doneCount>0?'🥉':''}</span>${topic}</h3>
+<div class="progress"><div class="bar" style="width:${doneCount/subs.length*100}%"></div></div>
+<div style="margin-top:10px"><span class="badge ${doneCount===subs.length?'done':''}">${doneCount===subs.length?'Mastered':doneCount>=Math.ceil(subs.length*.6)?'Proficient':doneCount>0?'Developing':'Not started'}</span></div>
+</div>`;
+}).join("")}
+</div>
+</div>
+`).join("");
+};
+
+VIEWS.topic = (el, topic)=>{
+setTitle(topic,"Choose a subtopic to revise");
+const subs = Object.values(SPEC).flatMap(p=>Object.entries(p)).find(([t])=>t===topic);
+if(!subs){ el.innerHTML="<div class='card'>Topic not found.</div>"; return; }
+el.innerHTML = `
+<div class="crumbs"><a onclick="render('topics')">Topics</a> › ${topic}</div>
+<div class="card">
+<div class="subtopics">
+${subs[1].map(s=>`<div class="sub-item ${STATE.completed[s]?'done':''}" onclick="render('subtopic','${s.replace(/'/g,"\\'")}')"><span>${s}</span><span class="check">✓</span></div>`).join("")}
+</div>
+</div>
+`;
+};
+
+VIEWS.subtopic = (el, sub, initialTab="notes")=>{
+setTitle(sub,"Notes · Flashcards · Quiz · Exam");
+const c = contentFor(sub);
+el.innerHTML = `
+<div class="crumbs"><a onclick="render('topics')">Topics</a> › <a onclick="history.back()">Back</a> › ${sub}</div>
+<div class="card">
+<div class="tabs">
+<div class="tab active" data-t="notes">📖 Notes</div>
+<div class="tab" data-t="flash">▤ Flashcards</div>
+<div class="tab" data-t="quiz">◈ Quiz</div>
+<div class="tab" data-t="exam">✎ Exam Questions</div>
+<div style="margin-left:auto">
+<button class="btn ${STATE.completed[sub]?'good':''}" id="markBtn">${STATE.completed[sub]?'✓ Completed':'Mark as Complete'}</button>
+</div>
+</div>
+<div id="tabContent"></div>
+</div>
+`;
+document.getElementById("markBtn").addEventListener("click",()=>{ markCompleted(sub); render("subtopic",sub); });
+const tabContent = document.getElementById("tabContent");
+const renderTab = (which)=>{
+document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.t===which));
+if(which==="notes"){ tabContent.innerHTML = enhancedNotes(sub,c); }
+else if(which==="flash"){ renderFlash(tabContent, c.flash, sub); }
+else if(which==="quiz"){ renderQuiz(tabContent, c.quiz, sub); }
+else if(which==="exam"){ renderExam(tabContent, c.exam, sub); }
+};
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>renderTab(t.dataset.t)));
+renderTab(initialTab);
+};
+
+function renderFlash(el, cards, sub){
+if(!cards||!cards.length){ el.innerHTML="<p>No flashcards yet.</p>"; return; }
+let i=0, shuffled=[...cards];
+const draw = ()=>{
+const [q,a] = shuffled[i];
+el.innerHTML = `
+<div class="flash-wrap">
+<div style="color:var(--muted);font-size:13px">Card ${i+1} of ${shuffled.length}</div>
+<div class="flashcard" id="fc">
+<div class="flashcard-inner">
+<div class="flashcard-face"><div><div class="q">Question</div><div class="t">${q}</div></div></div>
+<div class="flashcard-face back"><div><div class="q">Answer</div><div class="t">${a}</div></div></div>
+</div>
+</div>
+<div class="flash-controls">
+<button class="btn ghost" id="prev">‹ Prev</button>
+<button class="btn" id="flip">Flip Card</button>
+<button class="btn ghost" id="next">Next ›</button>
+<button class="btn ghost" id="shuffle">⤭ Shuffle</button>
+</div>
+<div class="progress" style="width:min(520px,100%)"><div class="bar" style="width:${(i+1)/shuffled.length*100}%"></div></div>
+</div>`;
+const fc = document.getElementById("fc");
+fc.addEventListener("click",()=>fc.classList.toggle("flipped"));
+document.getElementById("flip").onclick = ()=>fc.classList.toggle("flipped");
+document.getElementById("prev").onclick = ()=>{ i=(i-1+shuffled.length)%shuffled.length; draw(); };
+document.getElementById("next").onclick = ()=>{ i=(i+1)%shuffled.length; draw(); };
+document.getElementById("shuffle").onclick = ()=>{ shuffled.sort(()=>Math.random()-.5); i=0; draw(); toast("Shuffled!"); };
+};
+draw();
+}
+
+function renderQuiz(el, qs, sub){
+if(!qs||!qs.length){ el.innerHTML="<p>No quiz yet.</p>"; return; }
+let i=0, score=0, answered=false;
+const draw = ()=>{
+const [q,choices,correct,exp] = qs[i];
+el.innerHTML = `
+<div style="color:var(--muted);font-size:13px;margin-bottom:8px">Question ${i+1} of ${qs.length} · Score ${score}</div>
+<div class="quiz-q">${q}</div>
+<div id="choices">${choices.map((c,idx)=>`<div class="choice" data-i="${idx}">${String.fromCharCode(65+idx)}. ${c}</div>`).join("")}</div>
+<div id="explain"></div>
+<div style="margin-top:14px;display:flex;gap:10px">
+<button class="btn ghost" id="skip">Skip</button>
+<button class="btn" id="next" style="display:none">${i===qs.length-1?'Finish':'Next ›'}</button>
+</div>`;
+answered=false;
+document.querySelectorAll("#choices .choice").forEach(c=>c.addEventListener("click",()=>{
+if(answered) return; answered=true;
+const pick = +c.dataset.i;
+document.querySelectorAll(".choice").forEach(x=>x.classList.add("disabled"));
+if(pick===correct){ c.classList.add("correct"); score++; addXP(10,"Correct answer"); recordActivity(sub); }
+else { c.classList.add("wrong"); document.querySelector(`.choice[data-i="${correct}"]`).classList.add("correct"); }
+document.getElementById("explain").innerHTML = `<div class="explain"><b>${pick===correct?'Correct!':'Not quite.'}</b> ${exp||''}</div>`;
+document.getElementById("next").style.display="inline-flex";
+}));
+document.getElementById("skip").onclick = ()=>{ if(i<qs.length-1){i++;draw();} else finish(); };
+document.getElementById("next").onclick = ()=>{ if(i<qs.length-1){i++;draw();} else finish(); };
+};
+const finish = ()=>{
+STATE.scores[sub] = {best:Math.max((STATE.scores[sub]?.best||0),score), attempts:(STATE.scores[sub]?.attempts||0)+1, total:qs.length};
+save(); checkAchievements();
+el.innerHTML = `
+<div style="text-align:center;padding:30px">
+<div style="font-size:60px">${score===qs.length?'🏆':score>=qs.length*0.7?'🎉':'💪'}</div>
+<h2>You scored ${score}/${qs.length}</h2>
+<p style="color:var(--muted)">Best: ${STATE.scores[sub].best}/${qs.length} · Attempts: ${STATE.scores[sub].attempts}</p>
+<div style="display:flex;gap:10px;justify-content:center;margin-top:14px">
+<button class="btn" onclick="render('subtopic','${sub.replace(/'/g,"\\'")}')">Retry</button>
+<button class="btn ghost" onclick="render('topics')">Back to topics</button>
+</div>
+</div>`;
+};
+draw();
+}
+
+function renderExam(el, qs, sub){
+if(!qs||!qs.length){ el.innerHTML="<p>No exam questions yet.</p>"; return; }
+el.innerHTML = qs.map((q,idx)=>{
+const [marks,question,model] = q;
+return `<div class="exam-q" id="eq${idx}">
+<span class="marks">${marks} mark${marks>1?'s':''}</span>
+<div style="font-weight:600">${idx+1}. ${question}</div>
+<textarea placeholder="Type your answer here..."></textarea>
+<div style="margin-top:10px;display:flex;gap:10px">
+<button class="btn ghost" onclick="document.getElementById('eq${idx}').classList.add('show')">Show model answer</button>
+<button class="btn" onclick="(function(){const e=document.getElementById('eq${idx}');e.classList.add('show'); if(!e.dataset.x){e.dataset.x=1; (window.addXP||function(){})(25,'Exam question'); }})()">Mark complete</button>
+</div>
+<div class="model"><b>Model answer / mark scheme:</b>\n${model}<div class="exam-meta"><div class="exam-guide"><b>Examiner guidance</b><br>Use the command word, write one developed point per mark, and apply each point to the scenario.</div><div class="exam-guide"><b>Common mistakes</b><br>Vague statements, repeated points, missing technical vocabulary, or features with no explained effect.</div></div></div>
+</div>`;
+}).join("");
+}
+window.addXP = addXP; // expose for inline buttons
+
+VIEWS.flashcards = (el)=>{
+setTitle("Flashcards","Pick a subtopic to revise");
+const subs = Object.values(SPEC).flatMap(p=>Object.values(p)).flat();
+el.innerHTML = `<div class="card"><div class="grid cols-3">
+${subs.map(s=>`<div class="card topic-card" onclick="render('subtopic','${s.replace(/'/g,"\\'")}')"><h3>${s}</h3><div class="meta">${(contentFor(s).flash||[]).length} cards</div></div>`).join("")}
+</div></div>`;
+};
+VIEWS.quizzes = (el)=>{
+setTitle("Quizzes","Test your knowledge");
+const subs = Object.values(SPEC).flatMap(p=>Object.values(p)).flat();
+el.innerHTML = `<div class="card"><div class="grid cols-3">
+${subs.map(s=>{const sc=STATE.scores[s];return `<div class="card topic-card" onclick="render('subtopic','${s.replace(/'/g,"\\'")}')"><h3>${s}</h3><div class="meta">${(contentFor(s).quiz||[]).length} questions</div>${sc?`<div class="badge done">Best ${sc.best}/${sc.total}</div>`:`<div class="badge">Not attempted</div>`}</div>`;}).join("")}
+</div></div>`;
+};
+VIEWS.exam = (el)=>{
+setTitle("Exam Questions","OCR-style practice");
+const subs = Object.values(SPEC).flatMap(p=>Object.values(p)).flat();
+el.innerHTML = `<div class="card"><div class="grid cols-3">
+${subs.map(s=>`<div class="card topic-card" onclick="render('subtopic','${s.replace(/'/g,"\\'")}')"><h3>${s}</h3><div class="meta">${(contentFor(s).exam||[]).length} exam Qs</div></div>`).join("")}
+</div></div>`;
+};
+
+VIEWS.glossary = (el, initial="")=>{
+setTitle("Glossary","Key terminology for J277");
+el.innerHTML = `
+<input class="search" id="gsearch" placeholder="Search terms..."/>
+<div class="glossary-grid" id="gg"></div>`;
+const gg = document.getElementById("gg");
+const draw=(filter="")=>{
+const f=filter.toLowerCase();
+gg.innerHTML = GLOSSARY.filter(([n,d])=>n.toLowerCase().includes(f)||d.toLowerCase().includes(f))
+.sort((a,b)=>a[0].localeCompare(b[0]))
+.map(([n,d])=>`<div class="term"><div class="name">${n}</div><div>${d}</div></div>`).join("") || "<p>No matches.</p>";
+};
+document.getElementById("gsearch").value=initial;
+document.getElementById("gsearch").addEventListener("input",e=>draw(e.target.value));
+draw(initial);
+};
+
+function toolPanel(title,html){return `<div class="card tool-stage"><h2 style="margin-top:0">${title}</h2>${html}</div>`}
+function renderMixedSession(el,title,items,onDone){
+let i=0,score=0; const draw=()=>{if(i>=items.length){if(onDone)onDone(score);el.innerHTML=toolPanel(title,`<div style="text-align:center"><div style="font-size:56px">🏆</div><h2>Session complete</h2><p>You earned ${score} points across ${items.length} activities.</p><button class="btn" onclick="render('tools')">Back to Tools</button></div>`);return}const item=items[i];let body="";
+if(item.kind==="flash"){body=`<div class="flash-wrap"><div class="flashcard" id="mixCard"><div class="flashcard-inner"><div class="flashcard-face"><div><div class="q">${esc(item.sub)}</div><div class="t">${esc(item.data[0])}</div></div></div><div class="flashcard-face back"><div><div class="q">Answer</div><div class="t">${esc(item.data[1])}</div></div></div></div></div><button class="btn" id="mixNext">I reviewed this (+5)</button></div>`}
+else if(item.kind==="quiz"){const [q,opts,correct,exp]=item.data;body=`<div class="quiz-q">${esc(q)}</div><div id="mixChoices">${opts.map((o,n)=>`<div class="choice" data-i="${n}">${String.fromCharCode(65+n)}. ${esc(o)}</div>`).join("")}</div><div id="mixExplain"></div><button class="btn" id="mixNext" style="display:none">Next</button>`}
+else{const [marks,q,a]=item.data;body=`<div class="exam-q show"><span class="marks">${marks} marks</span><div style="font-weight:700">${esc(q)}</div><textarea placeholder="Plan your answer..."></textarea><div class="model"><b>Model answer:</b> ${esc(a)}</div></div><button class="btn" id="mixNext">Completed (+10)</button>`}
+el.innerHTML=toolPanel(title,`<div class="mastery">Activity ${i+1}/${items.length} · ${esc(item.sub)}</div>${body}`);if(item.kind==="flash")document.getElementById("mixCard").onclick=e=>e.currentTarget.classList.toggle("flipped");if(item.kind==="quiz")document.querySelectorAll("#mixChoices .choice").forEach(c=>c.onclick=()=>{const right=+c.dataset.i===item.data[2];c.classList.add(right?"correct":"wrong");if(right){score+=10;addXP(10,"Challenge answer")}document.getElementById("mixExplain").innerHTML=`<div class="explain">${right?"Correct!":"Review this one."} ${esc(item.data[3]||"")}</div>`;document.getElementById("mixNext").style.display="inline-flex"});document.getElementById("mixNext").onclick=()=>{if(item.kind!=="quiz"){score+=item.kind==="exam"?10:5;addXP(item.kind==="exam"?10:5,"Revision activity")}recordActivity(item.sub);i++;draw()};};draw();
+}
+function mixedItems(counts={quiz:5,flash:2,exam:1}){const pool=k=>shuffle(ALL_SUBS.flatMap(sub=>(contentFor(sub)[k]||[]).map(data=>({kind:k==="exam"?"exam":k,sub,data}))));return [...pool("quiz").slice(0,counts.quiz),...pool("flash").slice(0,counts.flash),...pool("exam").slice(0,counts.exam)]}
+function startSprint(el){let remaining=60,score=0,question=0,timer;const qs=shuffle(ALL_SUBS.flatMap(sub=>contentFor(sub).quiz.map(data=>({sub,data})))).slice(0,30);const draw=()=>{if(remaining<=0||question>=qs.length){clearInterval(timer);STATE.sprintScore+=score;addXP(score,"Exam Sprint");checkAchievements();el.innerHTML=toolPanel("Exam Sprint",`<div style="text-align:center"><div class="timer">TIME</div><h2>${score} points</h2><button class="btn" onclick="render('tools')">Finish</button></div>`);return}const x=qs[question];el.innerHTML=toolPanel("Exam Sprint",`<div style="display:flex;justify-content:space-between"><span class="mastery">${esc(x.sub)} · Score ${score}</span><span class="timer" id="sprintTimer">${remaining}s</span></div><div class="quiz-q">${esc(x.data[0])}</div>${x.data[1].map((o,i)=>`<div class="choice" data-i="${i}">${esc(o)}</div>`).join("")}`);document.querySelectorAll(".choice").forEach(c=>c.onclick=()=>{if(+c.dataset.i===x.data[2])score+=10;recordActivity(x.sub);question++;draw()})};draw();timer=setInterval(()=>{remaining--;const t=document.getElementById("sprintTimer");if(t)t.textContent=`${remaining}s`;if(remaining<=0)draw()},1000)}
+VIEWS.tools=(el)=>{setTitle("Tools Hub","Smart mixed revision across OCR J277");el.innerHTML=`<div class="grid cols-3">
+${[["▤","Random Flashcard","Draw a card from anywhere in the specification.","randomFlash"],["✎","Random Exam Question","Practise an OCR-style question from any topic.","randomExam"],["◉","Revision Roulette","Let RevisePro select your next topic.","roulette"],["⚔","Challenge Mode","A mixed session of flashcards, MCQs and exam questions.","challenge"],["☀","Daily Challenge","Your daily set: 5 MCQs, 2 cards and 1 exam question.","daily"],["⏱","Exam Sprint","Answer as many quick-fire MCQs as possible in 60 seconds.","sprint"],["⌁","Weak Topics Detector","Use quiz performance to recommend priority areas.","weak"],["▦","Progress Heatmap","See activity and mastery across all subtopics.","heatmap"],["🧒","Explain Like I’m 5","Get a clear, accurate explanation of any subtopic.","eli5"]].map(([ic,n,d,id])=>`<div class="card tool-card"><div class="tool-icon">${ic}</div><h3>${n}</h3><p>${d}</p><button class="btn ghost" data-tool="${id}">Open</button></div>`).join("")}</div><div id="toolOutput"></div>`;
+const out=document.getElementById("toolOutput");document.querySelectorAll("[data-tool]").forEach(b=>b.onclick=()=>{const id=b.dataset.tool;if(id==="randomFlash"){const sub=random(ALL_SUBS),card=random(contentFor(sub).flash);out.innerHTML=toolPanel("Random Flashcard · "+esc(sub),"<div id='randomFlashSlot'></div>");renderFlash(document.getElementById("randomFlashSlot"),[card],sub)}else if(id==="randomExam"){const sub=random(ALL_SUBS);out.innerHTML=toolPanel("Random Exam Question · "+esc(sub),"<div id='randomExamSlot'></div>");renderExam(document.getElementById("randomExamSlot"),[random(contentFor(sub).exam)],sub)}else if(id==="roulette"){const sub=random(ALL_SUBS);out.innerHTML=toolPanel("Revision Roulette",`<div style="text-align:center"><div style="font-size:54px">◉</div><h2>${esc(sub)}</h2><p>${esc(TOPIC_FOR[sub])}</p><button class="btn" onclick="render('subtopic','${sub.replace(/'/g,"\\'")}')">Revise this topic</button></div>`)}else if(id==="challenge"){renderMixedSession(out,"Challenge Mode",shuffle(mixedItems({quiz:3,flash:2,exam:1})),score=>{STATE.challenges++;addXP(30+score,"Challenge complete");checkAchievements()})}else if(id==="daily"){const day=new Date().toISOString().slice(0,10);renderMixedSession(out,"Daily Challenge",shuffle(mixedItems()),score=>{if(!STATE.dailyChallenges[day]){STATE.dailyChallenges[day]=score;addXP(50,"Daily Challenge complete");checkAchievements()}})}else if(id==="sprint")startSprint(out);else if(id==="weak"){const ranked=ALL_SUBS.map(sub=>{const s=STATE.scores[sub];return {sub,pct:s?Math.round(s.best/s.total*100):-1}}).sort((a,b)=>a.pct-b.pct).slice(0,8);out.innerHTML=toolPanel("Weak Topics Detector",`<p style="color:var(--muted)">Prioritised from your best quiz scores; unattempted topics appear first.</p>${ranked.map(x=>`<div class="sub-item" onclick="render('subtopic','${x.sub.replace(/'/g,"\\'")}')"><span>${esc(x.sub)}</span><span>${x.pct<0?"Not attempted":x.pct+"%"}</span></div>`).join("")}`)}else if(id==="heatmap"){out.innerHTML=toolPanel("Progress Heatmap",`<div class="heatmap">${ALL_SUBS.map(sub=>{const s=STATE.scores[sub],pct=s?Math.round(s.best/s.total*100):0,activity=Object.values(STATE.activity).reduce((n,d)=>n+(d[sub]||0),0);return `<div class="heat-cell" style="background:color-mix(in srgb,var(--good) ${Math.max(4,pct)}%,var(--panel-2))"><b>${esc(sub)}</b><div>${pct}% quiz · ${activity} activities</div></div>`}).join("")}</div>`)}else{out.innerHTML=toolPanel("Explain Like I’m 5",`<select class="search" id="eliSelect">${ALL_SUBS.map(s=>`<option>${esc(s)}</option>`).join("")}</select><div class="explain" id="eliText">${simpleExplanation(ALL_SUBS[0])}</div>`);document.getElementById("eliSelect").onchange=e=>document.getElementById("eliText").textContent=simpleExplanation(e.target.value)}out.scrollIntoView({behavior:"smooth",block:"start"})});};
+
+VIEWS.progress = (el)=>{
+setTitle("Progress","Your stats and achievements");
+const allSubs = Object.values(SPEC).flatMap(p=>Object.values(p)).flat();
+const done = Object.keys(STATE.completed).length;
+el.innerHTML = `
+<div class="grid cols-3">
+<div class="card stat"><div class="label">XP</div><div class="value">${STATE.xp}</div><div class="sub">Level: ${level()}</div></div>
+<div class="card stat"><div class="label">Completed</div><div class="value">${done}/${allSubs.length}</div></div>
+<div class="card stat"><div class="label">Streak</div><div class="value">${STATE.streak}🔥</div></div>
+</div>
+<div style="height:18px"></div>
+<div class="card">
+<h2 style="margin:0 0 12px">Topic progress</h2>
+${Object.entries(SPEC).map(([paper,topics])=>`
+<h3 style="color:var(--neon)">${paper}</h3>
+${Object.entries(topics).map(([t,subs])=>{
+const d=subs.filter(s=>STATE.completed[s]).length;
+return `<div style="margin:8px 0"><div style="display:flex;justify-content:space-between;font-size:13px"><span>${t}</span><span>${d}/${subs.length}</span></div><div class="progress"><div class="bar" style="width:${d/subs.length*100}%"></div></div></div>`;
+}).join("")}`).join("")}
+</div>
+<div style="height:18px"></div>
+<div class="card">
+<h2 style="margin:0 0 12px">Achievements</h2>
+<div class="grid cols-4">
+${ACHIEVEMENTS.map(([id,em,nm,ds])=>`<div class="ach ${STATE.achievements[id]?'unlocked':''}"><div class="em">${STATE.achievements[id]?em:'🔒'}</div><div class="nm">${nm}</div><div class="ds">${ds}</div></div>`).join("")}
+</div>
+</div>
+`;
+};
+
+VIEWS.settings = (el)=>{
+setTitle("Settings","Preferences and data");
+el.innerHTML = `
+<div class="card" style="max-width:600px">
+<h3 style="margin-top:0">Appearance</h3>
+<p style="color:var(--muted);font-size:13px">Switch between dark and light themes.</p>
+<button class="btn" onclick="STATE.theme=STATE.theme==='light'?'dark':'light';save();applyTheme();">Toggle Theme (currently: ${STATE.theme})</button>
+
+<h3 style="margin-top:24px">Data</h3>
+<p style="color:var(--muted);font-size:13px">Your progress is stored locally in your browser.</p>
+<button class="btn bad" id="reset">Reset all progress</button>
+</div>
+`;
+document.getElementById("reset").onclick = ()=>{
+if(confirm("Are you sure? This will erase all XP, completed topics and streak.")){
+localStorage.removeItem("revisepro_state"); STATE = {...DEFAULT_STATE}; save(); applyTheme(); render("dashboard");
+toast("Progress reset");
+}
+};
+};
+
+/* Expose render globally for inline onclick */
+window.render = render; window.STATE = STATE; window.save = save; window.applyTheme = applyTheme;
+
+/* Boot */
+refreshChips();
+setupGlobalSearch();
+checkAchievements();
+render("dashboard");
+</script>
+</body>
+</html>
